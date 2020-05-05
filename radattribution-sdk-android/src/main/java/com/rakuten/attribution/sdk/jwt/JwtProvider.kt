@@ -1,7 +1,6 @@
 package com.rakuten.attribution.sdk.jwt
 
 import android.util.Base64
-import com.rakuten.attribution.sdk.TokensStorage
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.security.KeyFactory
@@ -19,8 +18,6 @@ class JwtProvider(
     }
 
     fun obtainToken(): String {
-
-
         val bytes = Base64.decode(secretKey, Base64.DEFAULT)
 
         val keySpec = PKCS8EncodedKeySpec(bytes)
@@ -30,7 +27,7 @@ class JwtProvider(
         val now = System.currentTimeMillis()
         val expires = System.currentTimeMillis() + TOKEN_TTL_HOURS * 60 * 60 * 1000
 
-        return Jwts.builder()
+        val token = Jwts.builder()
             .setIssuer(ISSUER)
             .setSubject(ISSUER)
             .setAudience(AUDIENCE)
@@ -39,5 +36,7 @@ class JwtProvider(
             .claim("exp", expires)
             .signWith(key, SignatureAlgorithm.RS256)
             .compact()
+
+        return "Bearer $token"
     }
 }

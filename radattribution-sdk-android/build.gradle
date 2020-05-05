@@ -59,4 +59,5 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.11.1') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 }

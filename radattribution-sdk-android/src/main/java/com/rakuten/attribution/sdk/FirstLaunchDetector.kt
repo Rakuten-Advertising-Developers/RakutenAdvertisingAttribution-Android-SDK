@@ -6,8 +6,5 @@ interface FirstLaunchDetector {
 
 
 class StubFirstLaunchDetector : FirstLaunchDetector {
-    override val isFirstLaunch: Boolean
-        get(){
-            throw NotImplementedError()
-        }
+    override val isFirstLaunch = true//todo implement
 }

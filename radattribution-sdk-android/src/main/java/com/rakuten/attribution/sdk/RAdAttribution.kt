@@ -3,21 +3,22 @@ package com.rakuten.attribution.sdk
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
+import com.rakuten.attribution.sdk.jwt.TokensStorage
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
-class RAdAttribution(
-    private val configuration: Configuration,
-    private val coroutineScope: CoroutineScope
-) {
+class RAdAttribution(private val configuration: Configuration) {
     companion object {
         val tag = RAdAttribution::class.java.simpleName
     }
+
     init {
         sendAppLaunchedEventIfNeeded()
-        validate()
+//        validate()//todo fix validation process
     }
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val tokenStorage = TokensStorage
 
     @VisibleForTesting

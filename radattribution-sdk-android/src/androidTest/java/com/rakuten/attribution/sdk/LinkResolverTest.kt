@@ -1,10 +1,8 @@
 package com.rakuten.attribution.sdk
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.Assert.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import org.junit.Assert.assertTrue
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -13,30 +11,36 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LinkResolverTest {
 
-    val testScope = CoroutineScope(Dispatchers.IO)
-
     @Before
     fun setUp() {
-//        val context = InstrumentationRegistry.getInstrumentation().context
-//        AndroidThreeTen.init(context);
     }
 
     @After
     fun tearDown() {
-        testScope.cancel()
     }
 
     @Test
-    fun resolve() {
+    fun obtainToken() {
         val configuration = Configuration(
             appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
             privateKey = secretKey,
             isManualAppLaunch = false
         )
-        val attribution = RAdAttribution(configuration, testScope)
+        val attribution = RAdAttribution(configuration)
 
         val token = attribution.tokenProvider.obtainToken()
         assertTrue("token is not generated", token.isNotBlank())
+    }
+
+    @Test
+    fun resolve() = runBlocking {
+        val configuration = Configuration(
+            appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
+            privateKey = secretKey,
+            isManualAppLaunch = false
+        )
+        val attribution = RAdAttribution(configuration)
+        attribution.linkResolver.resolve("")
     }
 
     private val secretKey =
