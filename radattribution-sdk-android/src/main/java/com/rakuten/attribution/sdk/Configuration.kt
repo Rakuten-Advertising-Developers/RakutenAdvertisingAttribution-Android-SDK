@@ -1,25 +1,18 @@
 package com.rakuten.attribution.sdk
 
+import android.util.Log
+import com.rakuten.attribution.sdk.jwt.JwtProvider
+
 data class Configuration(
-    val privateKey: PrivateKey,
+    val appId: String,
+    val privateKey: String,
     val isManualAppLaunch: Boolean
 ) {
-    private val accessKeyProcessor = JWTHandler()
-    private val tokenStorage = TokensStorage
-
-    fun validate(): Boolean {
-        return try {
-            accessKeyProcessor.process(privateKey, tokenStorage)
-            true
-        } catch (e: Exception) {
-            //assertionFailure(error.localizedDescription)
-            false
-        }
-    }
 
     companion object {
         val default = Configuration(
-            privateKey = PrivateKey(""),
+            appId = "",
+            privateKey = "",
             isManualAppLaunch = false
         )
     }

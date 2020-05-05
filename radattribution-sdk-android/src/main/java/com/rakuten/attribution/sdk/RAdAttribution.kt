@@ -1,33 +1,48 @@
 package com.rakuten.attribution.sdk
 
+import android.util.Log
+import androidx.annotation.VisibleForTesting
+import com.rakuten.attribution.sdk.jwt.JwtProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
 class RAdAttribution(
-    private val eventSender: EventSender = EventSender(),
-    private val linkResolver: LinkResolver = LinkResolver(),
+    private val configuration: Configuration,
     private val coroutineScope: CoroutineScope
 ) {
-    private var configuration = Configuration.default
-
-    fun setup(configuration: Configuration) {
-        this.configuration = configuration
+    companion object {
+        val tag = RAdAttribution::class.java.simpleName
+    }
+    init {
+        sendAppLaunchedEventIfNeeded()
+        validate()
     }
 
-    private fun checkConfiguration() {
+    private val tokenStorage = TokensStorage
 
-        val isValid = configuration.validate()
-        assert(isValid) {
-            "Provide valid AttributionConfiguration by calling " +
-                    "RADAttribution.setup(with configuration:) at first"
+    @VisibleForTesting
+    val tokenProvider = JwtProvider(
+        configuration.appId,
+        configuration.privateKey,
+        tokenStorage
+    )
+
+    @VisibleForTesting
+    val eventSender: EventSender = EventSender()
+
+    @VisibleForTesting
+    val linkResolver: LinkResolver = LinkResolver(tokenProvider)
+
+    private fun validate(): Boolean {
+        return try {
+            tokenProvider.obtainToken()
+            true
+        } catch (e: Exception) {
+            //assertionFailure(error.localizedDescription)
+            Log.e(tag, "Configuration.validate() failed: ${e.message}")
+            false
         }
     }
-
-    init {
-        checkConfiguration()
-        sendAppLaunchedEventIfNeeded()
-    }
-
 
     private fun sendAppLaunchedEventIfNeeded() {
         if (!configuration.isManualAppLaunch) {
