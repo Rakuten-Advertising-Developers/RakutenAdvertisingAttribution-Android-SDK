@@ -3,12 +3,10 @@ package com.rakuten.attribution.sdk.network
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.rakuten.attribution.sdk.RAdDeepLinkData
 import com.rakuten.attribution.sdk.RAdSendEventData
-import com.rakuten.attribution.sdk.ResolveLinkRequest
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 
 import retrofit2.Retrofit
@@ -28,27 +26,24 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-/**
- * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
- * object.
- */
-
 val logging = HttpLoggingInterceptor().apply {
     level = HttpLoggingInterceptor.Level.BODY
-
 }
 
 val httpClient: OkHttpClient = OkHttpClient.Builder().apply {
     addInterceptor(logging)
 }.build()
 
+/**
+ * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
+ * object.
+ */
 private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .client(httpClient)
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
-
 
 interface RAdAPIService {
     @POST("resolve-link")
@@ -61,7 +56,7 @@ interface RAdAPIService {
     @POST("send-event")
     @Headers("Content-Type:application/json")
     fun sendEventAsync(
-        @Body request: RequestBody,
+        @Body request: SendEventRequest,
         @Header("Authorization") token: String
     ): Deferred<RAdSendEventData>
 }

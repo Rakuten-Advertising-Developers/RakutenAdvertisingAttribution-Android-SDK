@@ -29,7 +29,7 @@ class RAdAttribution(private val configuration: Configuration) {
     )
 
     @VisibleForTesting
-    val eventSender: EventSender = EventSender()
+    val eventSender: EventSender = EventSender(tokenProvider)
 
     @VisibleForTesting
     val linkResolver: LinkResolver = LinkResolver(tokenProvider)

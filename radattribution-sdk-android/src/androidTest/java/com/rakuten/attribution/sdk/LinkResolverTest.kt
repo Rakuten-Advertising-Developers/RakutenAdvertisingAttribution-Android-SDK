@@ -10,9 +10,16 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LinkResolverTest {
+    private lateinit var attribution: RAdAttribution
 
     @Before
     fun setUp() {
+        val configuration = Configuration(
+            appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
+            privateKey = secretKey,
+            isManualAppLaunch = false
+        )
+        attribution = RAdAttribution(configuration)
     }
 
     @After
@@ -21,26 +28,18 @@ class LinkResolverTest {
 
     @Test
     fun obtainToken() {
-        val configuration = Configuration(
-            appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
-            privateKey = secretKey,
-            isManualAppLaunch = false
-        )
-        val attribution = RAdAttribution(configuration)
-
         val token = attribution.tokenProvider.obtainToken()
         assertTrue("token is not generated", token.isNotBlank())
     }
 
     @Test
     fun resolve() = runBlocking {
-        val configuration = Configuration(
-            appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
-            privateKey = secretKey,
-            isManualAppLaunch = false
-        )
-        val attribution = RAdAttribution(configuration)
         attribution.linkResolver.resolve("")
+    }
+
+    @Test
+    fun sendEvent() = runBlocking {
+        attribution.eventSender.sendEvent("TEST_EVENT_WITH_DATA")
     }
 
     private val secretKey =
@@ -93,5 +92,4 @@ class LinkResolverTest {
                 "koJtXaRXMNe5qwmnMKerhHUWPlIPcDB1U+W9sOgy1aTiQBdIGTvSdvUYJyJ/JeL9" +
                 "FMkTsUmZXtpGPBeAKAZgNz3BnBJu8JU8ASA1eHDvhIPHg6PUkDHx5X7X/+xQGW1N" +
                 "m6n6UBfw9EqrngJNmdJuk1BqQgtNIUj9Ml2UFYfP8xON98PKtXx1zYLZPfo="
-
 }
