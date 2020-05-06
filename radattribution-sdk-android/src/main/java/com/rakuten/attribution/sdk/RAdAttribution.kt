@@ -36,10 +36,10 @@ class RAdAttribution(
     private val firstLaunchDetector = FirstLaunchDetector(context)
 
     @VisibleForTesting
-    val eventSender: EventSender = EventSender(tokenProvider, firstLaunchDetector)
+    val eventSender: EventSender = EventSender(context, tokenProvider)
 
     @VisibleForTesting
-    val linkResolver: LinkResolver = LinkResolver(tokenProvider, firstLaunchDetector)
+    val linkResolver: LinkResolver = LinkResolver(context, tokenProvider, firstLaunchDetector)
 
     private fun validate(): Boolean {
         return try {

@@ -1,5 +1,10 @@
 package com.rakuten.attribution.sdk.network
 
+import android.content.Context
+import android.content.res.Resources
+import android.os.Build
+import android.provider.Settings
+import com.rakuten.attribution.sdk.BuildConfig
 import com.squareup.moshi.Json
 
 data class DeviceData(
@@ -12,16 +17,21 @@ data class DeviceData(
     @Json(name = "is_simulator") val isSimulator: Boolean
 ) {
     companion object {
-        val default =
-            DeviceData(//todo replace with real values
-                os = "Android",
-                osVersion = "13.89978",
-                model = "emalator",
-                screenWidth = 375,
-                screenHeight = 812,
-                deviceId = "BE6903B3-1D6B-44C1-A1D0-6E42F56AFD7",
-                isSimulator = false
+        fun create(context: Context): DeviceData {
+            val deviceId = Settings.Secure.getString(//todo: discuss
+                context.contentResolver,
+                Settings.Secure.ANDROID_ID
             )
+            return DeviceData(
+                os = "Android",
+                osVersion = Build.VERSION.RELEASE,
+                model = Build.MODEL,
+                screenWidth = Resources.getSystem().displayMetrics.widthPixels,
+                screenHeight = Resources.getSystem().displayMetrics.heightPixels,
+                deviceId = deviceId,
+                isSimulator = Build.FINGERPRINT.contains("generic")
+            )
+        }
     }
 }
 
@@ -39,14 +49,17 @@ data class EventData(
 
 data class UserData(
     @Json(name = "bundle_identifier") val applicationId: String,
-    @Json(name = "app_version") val versionName: String
+    @Json(name = "app_version") val versionName: String,
+    @Json(name = "sdk_version") val sdkVersion: String
 ) {
     companion object {
-        val default =
-            UserData(//todo replace with real values
-                applicationId = "com.rakuten.advertising.RADAttribution-Example",
-                versionName = "0.0.1"
+        fun create(): UserData {
+            return UserData(
+                applicationId = BuildConfig.APPLICATION_ID,
+                versionName = BuildConfig.VERSION_NAME,
+                sdkVersion = BuildConfig.VERSION_NAME
             )
+        }
     }
 }
 

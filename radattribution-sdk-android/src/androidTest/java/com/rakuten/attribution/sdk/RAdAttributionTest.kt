@@ -1,7 +1,10 @@
 package com.rakuten.attribution.sdk
 
+import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.rakuten.attribution.sdk.network.DeviceData
+import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -11,6 +14,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class RAdAttributionTest {
+    private lateinit var context: Context
     private lateinit var attribution: RAdAttribution
 
     @Before
@@ -20,7 +24,7 @@ class RAdAttributionTest {
             privateKey = secretKey,
             isManualAppLaunch = false
         )
-        val context = InstrumentationRegistry.getInstrumentation().context
+        context = InstrumentationRegistry.getInstrumentation().context
         attribution = RAdAttribution(context, configuration)
     }
 
@@ -36,12 +40,27 @@ class RAdAttributionTest {
 
     @Test
     fun resolve() = runBlocking {
-        attribution.linkResolver.resolve("")
+        attribution.linkResolver.resolve(
+            "",
+            userData = UserData.create()
+                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            deviceData = DeviceData.create(context)
+                .copy(os = "iOS",//todo remove this
+                    deviceId = "00000000-0000-0000-0000-000000000000",
+                    osVersion = "10.0")
+        )
     }
 
     @Test
     fun sendEvent() = runBlocking {
-        attribution.eventSender.sendEvent("TEST_EVENT_WITH_DATA")
+        attribution.eventSender.sendEvent(
+            name = "ADD_TO_CART",
+            eventData = null,
+            userData = UserData.create()//todo remove this
+                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            deviceData = DeviceData.create(context)
+                .copy(os = "iOS")//todo remove this
+        )
     }
 
     private val secretKey =
