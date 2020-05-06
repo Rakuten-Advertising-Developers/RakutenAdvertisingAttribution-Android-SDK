@@ -18,6 +18,23 @@ class JwtProvider(
     }
 
     fun obtainToken(): String {
+        return if (tokenStorage.hasValidToken()) {
+            tokenStorage.token!!.value
+        } else {
+            val token = generateToken()
+            tokenStorage.saveToken(
+                Token(
+                    value = token,
+                    expires = System.currentTimeMillis()
+                            + TOKEN_TTL_HOURS * 60 * 60 * 1000
+                )
+            )
+            token
+
+        }
+    }
+
+    private fun generateToken(): String {
         val bytes = Base64.decode(secretKey, Base64.DEFAULT)
 
         val keySpec = PKCS8EncodedKeySpec(bytes)

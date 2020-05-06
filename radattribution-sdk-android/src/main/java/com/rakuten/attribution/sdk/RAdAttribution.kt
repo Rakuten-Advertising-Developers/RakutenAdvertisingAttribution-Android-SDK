@@ -19,7 +19,7 @@ class RAdAttribution(private val configuration: Configuration) {
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val tokenStorage = TokensStorage
+    private val tokenStorage = TokensStorage()
 
     @VisibleForTesting
     val tokenProvider = JwtProvider(

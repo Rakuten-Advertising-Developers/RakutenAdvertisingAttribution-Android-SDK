@@ -1,19 +1,27 @@
 package com.rakuten.attribution.sdk.jwt
 
-object TokensStorage {
-    private var internalToken: String? = null
-    private var internalSessionID: String? = null
+class TokensStorage() {
+    private var internalToken: Token? = null
 
-    val token: String? =
-        internalToken
-    val sessionId: String? =
-        internalSessionID
 
-    fun modifyToken(token: String?) {
+    val token: Token? = internalToken
+
+    fun saveToken(token: Token) {
         internalToken = token
     }
 
-    fun modifySessionId(sessionId: String?) {
-        internalSessionID = sessionId
+    fun hasValidToken(): Boolean {
+        if (token == null) return false
+
+        val now = System.currentTimeMillis()
+        if (now > token.expires) {
+            return false
+        }
+        return true
     }
 }
+
+data class Token(
+    val value: String,
+    val expires: Long
+)
