@@ -1,5 +1,6 @@
 package com.rakuten.attribution.sdk
 
+import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
@@ -8,7 +9,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
-class RAdAttribution(private val configuration: Configuration) {
+class RAdAttribution(
+    context: Context,
+    private val configuration: Configuration
+) {
+
     companion object {
         val tag = RAdAttribution::class.java.simpleName
     }
@@ -28,11 +33,13 @@ class RAdAttribution(private val configuration: Configuration) {
         tokenStorage
     )
 
-    @VisibleForTesting
-    val eventSender: EventSender = EventSender(tokenProvider)
+    private val firstLaunchDetector = FirstLaunchDetector(context)
 
     @VisibleForTesting
-    val linkResolver: LinkResolver = LinkResolver(tokenProvider)
+    val eventSender: EventSender = EventSender(tokenProvider, firstLaunchDetector)
+
+    @VisibleForTesting
+    val linkResolver: LinkResolver = LinkResolver(tokenProvider, firstLaunchDetector)
 
     private fun validate(): Boolean {
         return try {

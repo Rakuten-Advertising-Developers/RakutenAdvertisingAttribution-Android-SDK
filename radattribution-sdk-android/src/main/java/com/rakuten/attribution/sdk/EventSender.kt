@@ -6,7 +6,7 @@ import com.rakuten.attribution.sdk.network.*
 
 class EventSender(
     private val tokenProvider: JwtProvider,
-    private val firstLaunchDetector: FirstLaunchDetector = StubFirstLaunchDetector()
+    private val firstLaunchDetector: FirstLaunchDetector
 ) {
     companion object {
         val tag = EventSender::class.java.simpleName
