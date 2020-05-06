@@ -8,7 +8,8 @@ import com.rakuten.attribution.sdk.network.*
 
 class EventSender(
     private val context: Context,
-    private val tokenProvider: JwtProvider
+    private val tokenProvider: JwtProvider,
+    private val sessionStorage: SessionStorage
 ) {
     companion object {
         val tag = EventSender::class.java.simpleName
@@ -24,18 +25,25 @@ class EventSender(
         eventData: EventData? = null,
         userData: UserData,
         deviceData: DeviceData
-    ) {
+    ): Result<RAdSendEventData> {
         val token = tokenProvider.obtainToken()
         val request = SendEventRequest(
             name = name,
-            sessionId = null,
+            sessionId = sessionStorage.sessionId,
             userData = userData,
             deviceData = deviceData,
             eventData = eventData
         )
 
-        val result = RAdApi.retrofitService.sendEventAsync(request, token).await()
-        //todo add proper callback
-        Log.d(tag, "received = $result")
+        return try {
+            val result = RAdApi.retrofitService
+                .sendEventAsync(request, token).await()
+
+            Log.d(tag, "received = $result")
+            Result.Success(result)
+        } catch (e: Exception) {
+            Log.e(tag, "sendEventAsync failed; ${e.message}")
+            Result.Error("Failed with error: ${e.message}")
+        }
     }
 }

@@ -2,8 +2,6 @@ package com.rakuten.attribution.sdk.jwt
 
 class TokensStorage() {
     private var internalToken: Token? = null
-
-
     val token: Token? = internalToken
 
     fun saveToken(token: Token) {

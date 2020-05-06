@@ -6,7 +6,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.rakuten.attribution.sdk.network.DeviceData
 import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -20,16 +19,12 @@ class RAdAttributionTest {
     @Before
     fun setUp() {
         val configuration = Configuration(
-            appId = "com.rakuten.advertising.RADAttribution-Example",//TODO it's iOS id
+            appId = "com.rakuten.advertising.RADAttribution-Example",
             privateKey = secretKey,
             isManualAppLaunch = false
         )
         context = InstrumentationRegistry.getInstrumentation().context
         attribution = RAdAttribution(context, configuration)
-    }
-
-    @After
-    fun tearDown() {
     }
 
     @Test
@@ -39,28 +34,50 @@ class RAdAttributionTest {
     }
 
     @Test
-    fun resolve() = runBlocking {
-        attribution.linkResolver.resolve(
+    fun resolveLink() = runBlocking {
+        val resultSuccess = attribution.linkResolver.resolve(
             "",
             userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
             deviceData = DeviceData.create(context)
-                .copy(os = "iOS",//todo remove this
+                .copy(
+                    os = "iOS",
                     deviceId = "00000000-0000-0000-0000-000000000000",
-                    osVersion = "10.0")
+                    osVersion = "10.0"
+                )
         )
+
+        assertTrue(resultSuccess is Result.Success)
+    }
+
+    @Test
+    fun resolveLinkFail() = runBlocking {
+        val resultError = attribution.linkResolver.resolve(
+            "",
+            userData = UserData.create()
+                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            deviceData = DeviceData.create(context)
+                .copy(
+                    os = "iOS",
+                    deviceId = "00000000-0000-0000-0000-000000000000",
+                    osVersion = "10"
+                )
+        )
+        assertTrue(resultError is Result.Error)
     }
 
     @Test
     fun sendEvent() = runBlocking {
-        attribution.eventSender.sendEvent(
+        val resultSucess = attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = null,
-            userData = UserData.create()//todo remove this
+            userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
             deviceData = DeviceData.create(context)
-                .copy(os = "iOS")//todo remove this
+                .copy(os = "iOS")
         )
+
+        assertTrue(resultSucess is Result.Success)
     }
 
     private val secretKey =

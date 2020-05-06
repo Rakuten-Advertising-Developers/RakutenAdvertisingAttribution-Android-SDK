@@ -12,7 +12,8 @@ import com.rakuten.attribution.sdk.network.UserData
 class LinkResolver(
     private val context: Context,
     private val tokenProvider: JwtProvider,
-    private val firstLaunchDetector: FirstLaunchDetector
+    private val firstLaunchDetector: FirstLaunchDetector,
+    private val sessionStorage: SessionStorage
 ) {
     companion object {
         val tag = LinkResolver::class.java.simpleName
@@ -23,7 +24,11 @@ class LinkResolver(
     }
 
     @VisibleForTesting
-    suspend fun resolve(link: String, userData: UserData, deviceData: DeviceData) {
+    suspend fun resolve(
+        link: String,
+        userData: UserData,
+        deviceData: DeviceData
+    ): Result<RAdDeepLinkData> {
         val token = tokenProvider.obtainToken()
 
         val request = ResolveLinkRequest(
@@ -33,8 +38,18 @@ class LinkResolver(
             deviceData = deviceData
         )
 
-        val result = RAdApi.retrofitService.resolveLinkAsync(request, token).await()
-        //todo add proper callback
-        Log.d(tag, "received = $result")
+        return try {
+            val result = RAdApi.retrofitService.resolveLinkAsync(request, token).await()
+
+            val sessionId = result.sessionId
+            sessionStorage.saveId(sessionId)
+
+            Log.i(tag, "received = $sessionId")
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Log.e(tag, "resolveLinkAsync failed; ${e.message}")
+            Result.Error("Failed with error: ${e.message}")
+        }
     }
 }

@@ -33,13 +33,23 @@ class RAdAttribution(
         tokenStorage
     )
 
+    private val sessionStorage = SessionStorage()
     private val firstLaunchDetector = FirstLaunchDetector(context)
 
     @VisibleForTesting
-    val eventSender: EventSender = EventSender(context, tokenProvider)
+    val eventSender: EventSender = EventSender(
+        context,
+        tokenProvider,
+        sessionStorage
+    )
 
     @VisibleForTesting
-    val linkResolver: LinkResolver = LinkResolver(context, tokenProvider, firstLaunchDetector)
+    val linkResolver: LinkResolver = LinkResolver(
+        context,
+        tokenProvider,
+        firstLaunchDetector,
+        sessionStorage
+    )
 
     private fun validate(): Boolean {
         return try {
