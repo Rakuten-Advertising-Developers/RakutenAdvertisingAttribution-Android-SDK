@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.rakuten.attribution.sdk.network.DeviceData
+import com.rakuten.attribution.sdk.network.EventData
 import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
@@ -96,6 +97,30 @@ class RAdAttributionTest {
         assertTrue(resultSucess is Result.Success)
     }
 
+    @Test
+    fun sendEventWithEventData() = runBlocking {
+        val eventData = EventData(
+            transactionId = "123",
+            searchQuery = "test_query",
+            currency = "USD",
+            revenue = 0.5,
+            shipping = 0.6,
+            tax = 0.7,
+            coupon = "test_coupon",
+            affiliation = "test_affiliation",
+            description = "test_description"
+        )
+        val resultSucess = attribution.eventSender.sendEvent(
+            name = "ADD_TO_CART",
+            eventData = eventData,
+            userData = UserData.create()
+                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            deviceData = DeviceData.create(context)
+                .copy(os = "iOS")
+        )
+
+        assertTrue(resultSucess is Result.Success)
+    }
     private val secretKey =
         "MIIJKAIBAAKCAgEAvYkQBxCX6fDYHIzHDmJWv7Ic0Ab9f62phB2CfvG5JIvTC3Ur" +
                 "Lxta7uzm2GhJhACu0QV6K+cTX5J6jTBrHTwlWr8Eqsen+evMET9TxdRUl5r1Wl90" +
