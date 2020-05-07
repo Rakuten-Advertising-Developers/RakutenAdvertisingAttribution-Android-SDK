@@ -5,7 +5,6 @@ data class Configuration(
     val privateKey: String,
     val isManualAppLaunch: Boolean
 ) {
-
     companion object {
         val default = Configuration(
             appId = "",

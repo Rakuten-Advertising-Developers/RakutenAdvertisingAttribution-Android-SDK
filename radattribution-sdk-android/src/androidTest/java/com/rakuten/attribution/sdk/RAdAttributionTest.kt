@@ -6,6 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.rakuten.attribution.sdk.network.DeviceData
 import com.rakuten.attribution.sdk.network.EventData
 import com.rakuten.attribution.sdk.network.UserData
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -36,7 +37,9 @@ class RAdAttributionTest {
 
     @Test
     fun resolveLink() = runBlocking {
-        val resultSuccess = attribution.linkResolver.resolve(
+        val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
+
+        attribution.linkResolver.resolve(
             "",
             userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
@@ -46,14 +49,18 @@ class RAdAttributionTest {
                     deviceId = "00000000-0000-0000-0000-000000000000",
                     osVersion = "10.0"
                 )
-        )
-
-        assertTrue(resultSuccess is Result.Success)
+        ) {
+            deferredResult.complete(it)
+        }
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
     }
 
     @Test
     fun resolveLinkFail() = runBlocking {
-        val resultError = attribution.linkResolver.resolve(
+        val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
+
+        attribution.linkResolver.resolve(
             "",
             userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
@@ -61,29 +68,39 @@ class RAdAttributionTest {
                 .copy(
                     os = "iOS",
                     deviceId = "00000000-0000-0000-0000-000000000000",
-                    osVersion = "10"
+                    osVersion = "10"//os version without "." causes an error for now
                 )
-        )
-        assertTrue(resultError is Result.Error)
+        ){
+            deferredResult.complete(it)
+        }
+        val result = deferredResult.await()
+        assertTrue(result is Result.Error)
     }
 
     @Test
     fun sendEvent() = runBlocking {
-        val resultSucess = attribution.eventSender.sendEvent(
+        val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
+
+        attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = null,
             userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
             deviceData = DeviceData.create(context)
                 .copy(os = "iOS")
-        )
+        ){
+            deferredResult.complete(it)
+        }
 
-        assertTrue(resultSucess is Result.Success)
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
     }
 
     @Test
     fun sendEventWithCustomData() = runBlocking {
-        val resultSucess = attribution.eventSender.sendEvent(
+        val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
+
+        attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = null,
             userData = UserData.create()
@@ -92,13 +109,18 @@ class RAdAttributionTest {
                 .copy(os = "iOS"),
             customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
             customItems = arrayOf("item_1", "item_2", "item_3", "item_4", "item_5")
-        )
+        ){
+            deferredResult.complete(it)
+        }
 
-        assertTrue(resultSucess is Result.Success)
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
     }
 
     @Test
     fun sendEventWithEventData() = runBlocking {
+        val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
+
         val eventData = EventData(
             transactionId = "123",
             searchQuery = "test_query",
@@ -110,17 +132,21 @@ class RAdAttributionTest {
             affiliation = "test_affiliation",
             description = "test_description"
         )
-        val resultSucess = attribution.eventSender.sendEvent(
+        attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = eventData,
             userData = UserData.create()
                 .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
             deviceData = DeviceData.create(context)
                 .copy(os = "iOS")
-        )
+        ){
+            deferredResult.complete(it)
+        }
 
-        assertTrue(resultSucess is Result.Success)
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
     }
+
     private val secretKey =
         "MIIJKAIBAAKCAgEAvYkQBxCX6fDYHIzHDmJWv7Ic0Ab9f62phB2CfvG5JIvTC3Ur" +
                 "Lxta7uzm2GhJhACu0QV6K+cTX5J6jTBrHTwlWr8Eqsen+evMET9TxdRUl5r1Wl90" +

@@ -7,20 +7,13 @@ import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.jwt.TokensStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 
 class RAdAttribution(
     context: Context,
     private val configuration: Configuration
 ) {
-
     companion object {
         val tag = RAdAttribution::class.java.simpleName
-    }
-
-    init {
-        sendAppLaunchedEventIfNeeded()
-//        validate()//todo fix validation process
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -40,7 +33,8 @@ class RAdAttribution(
     val eventSender: EventSender = EventSender(
         context,
         tokenProvider,
-        sessionStorage
+        sessionStorage,
+        coroutineScope
     )
 
     @VisibleForTesting
@@ -48,25 +42,27 @@ class RAdAttribution(
         context,
         tokenProvider,
         firstLaunchDetector,
-        sessionStorage
+        sessionStorage,
+        coroutineScope
     )
+
+    init {
+        sendAppLaunchedEventIfNeeded()
+        validate()
+    }
 
     private fun validate(): Boolean {
         return try {
             tokenProvider.obtainToken()
             true
         } catch (e: Exception) {
-            //assertionFailure(error.localizedDescription)
             Log.e(tag, "Configuration.validate() failed: ${e.message}")
             false
         }
     }
 
     private fun sendAppLaunchedEventIfNeeded() {
-        if (!configuration.isManualAppLaunch) {
-            return
-        }
-        coroutineScope.async {
+        if (configuration.isManualAppLaunch) {
             linkResolver.resolve(link = "")
         }
     }

@@ -8,27 +8,32 @@ import com.rakuten.attribution.sdk.network.DeviceData
 import com.rakuten.attribution.sdk.network.RAdApi
 import com.rakuten.attribution.sdk.network.ResolveLinkRequest
 import com.rakuten.attribution.sdk.network.UserData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class LinkResolver(
     private val context: Context,
     private val tokenProvider: JwtProvider,
     private val firstLaunchDetector: FirstLaunchDetector,
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val scope: CoroutineScope
 ) {
     companion object {
         val tag = LinkResolver::class.java.simpleName
     }
 
-    suspend fun resolve(link: String) {
-        resolve(link, UserData.create(), DeviceData.create(context))
+
+    fun resolve(link: String, callback: ((Result<RAdDeepLinkData>) -> Unit)? = null) {
+        resolve(link, UserData.create(), DeviceData.create(context), callback)
     }
 
     @VisibleForTesting
-    suspend fun resolve(
+    fun resolve(
         link: String,
         userData: UserData,
-        deviceData: DeviceData
-    ): Result<RAdDeepLinkData> {
+        deviceData: DeviceData,
+        callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
+    ) {
         val token = tokenProvider.obtainToken()
 
         val request = ResolveLinkRequest(
@@ -38,18 +43,19 @@ class LinkResolver(
             deviceData = deviceData
         )
 
-        return try {
-            val result = RAdApi.retrofitService.resolveLinkAsync(request, token).await()
+        scope.launch {
+            try {
+                val result = RAdApi.retrofitService.resolveLinkAsync(request, token).await()
+                val sessionId = result.sessionId
 
-            val sessionId = result.sessionId
-            sessionStorage.saveId(sessionId)
+                sessionStorage.saveId(sessionId)
 
-            Log.i(tag, "received = $sessionId")
-
-            Result.Success(result)
-        } catch (e: Exception) {
-            Log.e(tag, "resolveLinkAsync failed; ${e.message}")
-            Result.Error("Failed with error: ${e.message}")
+                Log.i(tag, "received = $sessionId")
+                callback?.invoke(Result.Success(result))
+            } catch (e: Exception) {
+                Log.e(tag, "resolveLinkAsync failed; ${e.message}")
+                callback?.invoke(Result.Error("Failed with error: ${e.message}"))
+            }
         }
     }
 }

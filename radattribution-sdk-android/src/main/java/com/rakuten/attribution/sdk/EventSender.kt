@@ -5,29 +5,47 @@ import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.network.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class EventSender(
     private val context: Context,
     private val tokenProvider: JwtProvider,
-    private val sessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage,
+    private val scope: CoroutineScope
 ) {
     companion object {
         val tag = EventSender::class.java.simpleName
     }
 
-    suspend fun sendEvent(name: String, eventData: EventData? = null) {
-        sendEvent(name, eventData, UserData.create(), DeviceData.create(context))
+    fun sendEvent(
+        name: String,
+        eventData: EventData? = null,
+        customData: CustomData = emptyMap(),
+        customItems: Array<String> = emptyArray(),
+        callback: ((Result<RAdSendEventData>) -> Unit)? = null
+    ) {
+        sendEvent(
+            name = name,
+            eventData = eventData,
+            userData = UserData.create(),
+            deviceData = DeviceData.create(context),
+            customData = customData,
+            customItems = customItems,
+            callback = callback
+        )
     }
 
     @VisibleForTesting
-    suspend fun sendEvent(
+    fun sendEvent(
         name: String,
         eventData: EventData? = null,
         userData: UserData,
         deviceData: DeviceData,
         customData: CustomData = emptyMap(),
-        customItems: Array<String> = emptyArray()
-    ): Result<RAdSendEventData> {
+        customItems: Array<String> = emptyArray(),
+        callback: ((Result<RAdSendEventData>) -> Unit)? = null
+    ) {
         val token = tokenProvider.obtainToken()
         val request = SendEventRequest(
             name = name,
@@ -39,15 +57,18 @@ class EventSender(
             customItems = customItems
         )
 
-        return try {
-            val result = RAdApi.retrofitService
-                .sendEventAsync(request, token).await()
+        scope.launch {
+            try {
+                val result = RAdApi.retrofitService
+                    .sendEventAsync(request, token).await()
 
-            Log.d(tag, "received = $result")
-            Result.Success(result)
-        } catch (e: Exception) {
-            Log.e(tag, "sendEventAsync failed; ${e.message}")
-            Result.Error("Failed with error: ${e.message}")
+                Log.d(tag, "received = $result")
+
+                callback?.invoke(Result.Success(result))
+            } catch (e: Exception) {
+                Log.e(tag, "sendEventAsync failed; ${e.message}")
+                callback?.invoke(Result.Error("Failed with error: ${e.message}"))
+            }
         }
     }
 }
