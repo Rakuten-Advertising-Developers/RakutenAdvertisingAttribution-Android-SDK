@@ -28,10 +28,11 @@ class DataClassesTest {
 
     @Test
     fun createUserData() {
-        val userData = UserData.create()
+        val userData = UserData.create("appId")
 
         assertNotNull(userData)
         assertNotNull(userData.applicationId)
-        assertNotNull(userData.applicationId)
+        assertNotNull(userData.sdkVersion)
+        assertNotNull(userData.versionName)
     }
 }

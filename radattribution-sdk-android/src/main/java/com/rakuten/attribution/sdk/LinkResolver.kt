@@ -1,6 +1,5 @@
 package com.rakuten.attribution.sdk
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
@@ -12,7 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class LinkResolver(
-    private val context: Context,
+    private val userData: UserData,
+    private val deviceData: DeviceData,
     private val tokenProvider: JwtProvider,
     private val firstLaunchDetector: FirstLaunchDetector,
     private val sessionStorage: SessionStorage,
@@ -22,9 +22,8 @@ class LinkResolver(
         val tag = LinkResolver::class.java.simpleName
     }
 
-
     fun resolve(link: String, callback: ((Result<RAdDeepLinkData>) -> Unit)? = null) {
-        resolve(link, UserData.create(), DeviceData.create(context), callback)
+        resolve(link, userData, deviceData, callback)
     }
 
     @VisibleForTesting

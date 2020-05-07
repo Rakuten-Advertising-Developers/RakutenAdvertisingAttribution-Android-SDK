@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.jwt.TokensStorage
+import com.rakuten.attribution.sdk.network.DeviceData
+import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -29,21 +31,26 @@ class RAdAttribution(
     private val sessionStorage = SessionStorage()
     private val firstLaunchDetector = FirstLaunchDetector(context)
 
+    private val deviceData = DeviceData.create(context)
+    private val userData = UserData.create(configuration.appId)
+
     @VisibleForTesting
     val eventSender: EventSender = EventSender(
-        context,
-        tokenProvider,
-        sessionStorage,
-        coroutineScope
+        userData = userData,
+        deviceData = deviceData,
+        tokenProvider = tokenProvider,
+        sessionStorage = sessionStorage,
+        scope = coroutineScope
     )
 
     @VisibleForTesting
     val linkResolver: LinkResolver = LinkResolver(
-        context,
-        tokenProvider,
-        firstLaunchDetector,
-        sessionStorage,
-        coroutineScope
+        userData = userData,
+        deviceData = deviceData,
+        tokenProvider = tokenProvider,
+        firstLaunchDetector = firstLaunchDetector,
+        sessionStorage = sessionStorage,
+        scope = coroutineScope
     )
 
     init {

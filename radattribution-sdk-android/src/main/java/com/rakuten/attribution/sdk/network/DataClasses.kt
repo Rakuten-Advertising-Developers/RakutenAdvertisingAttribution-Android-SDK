@@ -53,9 +53,9 @@ data class UserData(
     @Json(name = "sdk_version") val sdkVersion: String
 ) {
     companion object {
-        fun create(): UserData {
+        fun create(appId: String): UserData {
             return UserData(
-                applicationId = BuildConfig.APPLICATION_ID,
+                applicationId = appId,
                 versionName = BuildConfig.VERSION_NAME,
                 sdkVersion = BuildConfig.VERSION_NAME
             )

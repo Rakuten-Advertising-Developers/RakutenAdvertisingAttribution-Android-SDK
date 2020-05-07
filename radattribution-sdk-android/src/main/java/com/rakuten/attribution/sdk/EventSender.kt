@@ -1,6 +1,5 @@
 package com.rakuten.attribution.sdk
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
@@ -9,7 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class EventSender(
-    private val context: Context,
+    private val userData: UserData,
+    private val deviceData: DeviceData,
     private val tokenProvider: JwtProvider,
     private val sessionStorage: SessionStorage,
     private val scope: CoroutineScope
@@ -28,8 +28,8 @@ class EventSender(
         sendEvent(
             name = name,
             eventData = eventData,
-            userData = UserData.create(),
-            deviceData = DeviceData.create(context),
+            userData = userData,
+            deviceData = deviceData,
             customData = customData,
             customItems = customItems,
             callback = callback

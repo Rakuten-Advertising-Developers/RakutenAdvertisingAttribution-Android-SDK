@@ -18,6 +18,8 @@ class RAdAttributionTest {
     private lateinit var context: Context
     private lateinit var attribution: RAdAttribution
 
+    private val appId = "com.rakutenadvertising.RADAdvertiserDemo"
+
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().context
@@ -28,7 +30,7 @@ class RAdAttributionTest {
             .use { it.readText() }
 
         val configuration = Configuration(
-            appId = "com.rakuten.advertising.RADAttribution-Example",
+            appId = appId,
             privateKey = secretKey,
             isManualAppLaunch = false
         )
@@ -47,8 +49,7 @@ class RAdAttributionTest {
 
         attribution.linkResolver.resolve(
             "",
-            userData = UserData.create()
-                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            userData = UserData.create(appId),
             deviceData = DeviceData.create(context)
                 .copy(
                     os = "iOS",
@@ -68,8 +69,7 @@ class RAdAttributionTest {
 
         attribution.linkResolver.resolve(
             "",
-            userData = UserData.create()
-                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            userData = UserData.create(appId),
             deviceData = DeviceData.create(context)
                 .copy(
                     os = "iOS",
@@ -90,8 +90,7 @@ class RAdAttributionTest {
         attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = null,
-            userData = UserData.create()
-                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            userData = UserData.create(appId),
             deviceData = DeviceData.create(context)
                 .copy(os = "iOS")
         ) {
@@ -109,8 +108,7 @@ class RAdAttributionTest {
         attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = null,
-            userData = UserData.create()
-                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            userData = UserData.create(appId),
             deviceData = DeviceData.create(context)
                 .copy(os = "iOS"),
             customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
@@ -141,8 +139,7 @@ class RAdAttributionTest {
         attribution.eventSender.sendEvent(
             name = "ADD_TO_CART",
             eventData = eventData,
-            userData = UserData.create()
-                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            userData = UserData.create(appId),
             deviceData = DeviceData.create(context)
                 .copy(os = "iOS")
         ) {
