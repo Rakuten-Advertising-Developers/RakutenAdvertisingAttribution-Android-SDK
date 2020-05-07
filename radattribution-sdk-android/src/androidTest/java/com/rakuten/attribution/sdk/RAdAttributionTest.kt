@@ -80,6 +80,22 @@ class RAdAttributionTest {
         assertTrue(resultSucess is Result.Success)
     }
 
+    @Test
+    fun sendEventWithCustomData() = runBlocking {
+        val resultSucess = attribution.eventSender.sendEvent(
+            name = "ADD_TO_CART",
+            eventData = null,
+            userData = UserData.create()
+                .copy(applicationId = "com.rakutenadvertising.RADAdvertiserDemo"),
+            deviceData = DeviceData.create(context)
+                .copy(os = "iOS"),
+            customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
+            customItems = arrayOf("item_1", "item_2", "item_3", "item_4", "item_5")
+        )
+
+        assertTrue(resultSucess is Result.Success)
+    }
+
     private val secretKey =
         "MIIJKAIBAAKCAgEAvYkQBxCX6fDYHIzHDmJWv7Ic0Ab9f62phB2CfvG5JIvTC3Ur" +
                 "Lxta7uzm2GhJhACu0QV6K+cTX5J6jTBrHTwlWr8Eqsen+evMET9TxdRUl5r1Wl90" +

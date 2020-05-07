@@ -45,7 +45,7 @@ private val retrofit = Retrofit.Builder()
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
 
-interface RAdAPIService {
+internal interface RAdAPIService {
     @POST("resolve-link")
     @Headers("Content-Type:application/json")
     fun resolveLinkAsync(
@@ -64,7 +64,7 @@ interface RAdAPIService {
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
-object RAdApi {
+internal object RAdApi {
     val retrofitService: RAdAPIService by lazy {
         retrofit.create(
             RAdAPIService::class.java

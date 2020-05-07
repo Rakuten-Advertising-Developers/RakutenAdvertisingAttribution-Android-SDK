@@ -24,7 +24,9 @@ class EventSender(
         name: String,
         eventData: EventData? = null,
         userData: UserData,
-        deviceData: DeviceData
+        deviceData: DeviceData,
+        customData: CustomData = emptyMap(),
+        customItems: Array<String> = emptyArray()
     ): Result<RAdSendEventData> {
         val token = tokenProvider.obtainToken()
         val request = SendEventRequest(
@@ -32,7 +34,9 @@ class EventSender(
             sessionId = sessionStorage.sessionId,
             userData = userData,
             deviceData = deviceData,
-            eventData = eventData
+            eventData = eventData,
+            customData = customData,
+            customItems = customItems
         )
 
         return try {
