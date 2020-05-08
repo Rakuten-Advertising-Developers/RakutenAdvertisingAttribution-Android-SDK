@@ -8,15 +8,16 @@ import com.rakuten.attribution.sdk.network.RAdApi
 import com.rakuten.attribution.sdk.network.ResolveLinkRequest
 import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LinkResolver(
-    private val userData: UserData,
-    private val deviceData: DeviceData,
-    private val tokenProvider: JwtProvider,
-    private val firstLaunchDetector: FirstLaunchDetector,
-    private val sessionStorage: SessionStorage,
-    private val scope: CoroutineScope
+        private val userData: UserData,
+        private val deviceData: DeviceData,
+        private val tokenProvider: JwtProvider,
+        private val firstLaunchDetector: FirstLaunchDetector,
+        private val sessionStorage: SessionStorage,
+        private val scope: CoroutineScope
 ) {
     companion object {
         val tag = LinkResolver::class.java.simpleName
@@ -28,18 +29,18 @@ class LinkResolver(
 
     @VisibleForTesting
     fun resolve(
-        link: String,
-        userData: UserData,
-        deviceData: DeviceData,
-        callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
+            link: String,
+            userData: UserData,
+            deviceData: DeviceData,
+            callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
 
         val request = ResolveLinkRequest(
-            firstSession = firstLaunchDetector.isFirstLaunch,
-            universalLinkUrl = link,
-            userData = userData,
-            deviceData = deviceData
+                firstSession = firstLaunchDetector.isFirstLaunch,
+                universalLinkUrl = link,
+                userData = userData,
+                deviceData = deviceData
         )
 
         scope.launch {
@@ -48,12 +49,17 @@ class LinkResolver(
                 val sessionId = result.sessionId
 
                 sessionStorage.saveId(sessionId)
-
                 Log.i(tag, "received = $sessionId")
-                callback?.invoke(Result.Success(result))
+
+                launch(context = Dispatchers.Main) {
+                    callback?.invoke(Result.Success(result))
+                }
             } catch (e: Exception) {
                 Log.e(tag, "resolveLinkAsync failed; ${e.message}")
-                callback?.invoke(Result.Error("Failed with error: ${e.message}"))
+
+                launch(context = Dispatchers.Main) {
+                    callback?.invoke(Result.Error("Failed with error: ${e.message}"))
+                }
             }
         }
     }
