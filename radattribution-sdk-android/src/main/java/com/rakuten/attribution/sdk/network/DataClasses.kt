@@ -47,6 +47,13 @@ data class EventData(
     val description: String?
 )
 
+data class ContentItem(
+        @Json(name = "\$sku") val sku: String?,
+        @Json(name = "\$price") val price: Double?,
+        @Json(name = "\$product_name") val productName: String?,
+        @Json (name = "\$quantity") val quantity:Int?
+)
+
 data class UserData(
     @Json(name = "bundle_identifier") val applicationId: String,
     @Json(name = "app_version") val versionName: String,

@@ -9,7 +9,7 @@ internal class SendEventRequest(
     @Json(name = "device_data") val deviceData: DeviceData,
     @Json(name = "event_data") val eventData: EventData? = null,
     @Json(name = "custom_data") val customData: CustomData,
-    @Json(name = "custom_items") val customItems: Array<String>
+    @Json(name = "content_items") val contentItems: Array<ContentItem>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -23,7 +23,7 @@ internal class SendEventRequest(
         if (deviceData != other.deviceData) return false
         if (eventData != other.eventData) return false
         if (customData != other.customData) return false
-        if (!customItems.contentEquals(other.customItems)) return false
+        if (!contentItems.contentEquals(other.contentItems)) return false
 
         return true
     }
@@ -35,7 +35,7 @@ internal class SendEventRequest(
         result = 31 * result + deviceData.hashCode()
         result = 31 * result + (eventData?.hashCode() ?: 0)
         result = 31 * result + customData.hashCode()
-        result = 31 * result + customItems.contentHashCode()
+        result = 31 * result + contentItems.contentHashCode()
         return result
     }
 }

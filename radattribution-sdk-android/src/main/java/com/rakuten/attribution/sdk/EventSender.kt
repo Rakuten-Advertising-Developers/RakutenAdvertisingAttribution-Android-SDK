@@ -23,7 +23,7 @@ class EventSender(
             name: String,
             eventData: EventData? = null,
             customData: CustomData = emptyMap(),
-            customItems: Array<String> = emptyArray(),
+            contentItems: Array<ContentItem> = emptyArray(),
             callback: ((Result<RAdSendEventData>) -> Unit)? = null
     ) {
         sendEvent(
@@ -32,7 +32,7 @@ class EventSender(
                 userData = userData,
                 deviceData = deviceData,
                 customData = customData,
-                customItems = customItems,
+                contentItems = contentItems,
                 callback = callback
         )
     }
@@ -44,7 +44,7 @@ class EventSender(
             userData: UserData,
             deviceData: DeviceData,
             customData: CustomData = emptyMap(),
-            customItems: Array<String> = emptyArray(),
+            contentItems: Array<ContentItem> = emptyArray(),
             callback: ((Result<RAdSendEventData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
@@ -55,7 +55,7 @@ class EventSender(
                 deviceData = deviceData,
                 eventData = eventData,
                 customData = customData,
-                customItems = customItems
+                contentItems = contentItems
         )
 
         scope.launch {
