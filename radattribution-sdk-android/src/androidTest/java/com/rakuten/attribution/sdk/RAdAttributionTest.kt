@@ -3,6 +3,7 @@ package com.rakuten.attribution.sdk
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.rakuten.attribution.sdk.network.ContentItem
 import com.rakuten.attribution.sdk.network.DeviceData
 import com.rakuten.attribution.sdk.network.EventData
 import com.rakuten.attribution.sdk.network.UserData
@@ -144,14 +145,38 @@ class RAdAttributionTest {
     fun sendEventWithCustomData() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
 
+        val item1 = ContentItem(sku = "sku_1", price = 1.99, productName = "name_1", quantity = 1)
+        val item2 = ContentItem(sku = "sku_2", price = 2.99, productName = "name_2", quantity = 2)
+
+        val request = attribution.eventSender.createRequest(
+                name = "ADD_TO_CART",
+                eventData = null,
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context),
+                customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
+                contentItems = arrayOf(item1, item2)
+        )
+
+        assertEquals(2, request.contentItems.size)
+        assertEquals(1.99, request.contentItems[0].price!!, 0.00001)
+        assertEquals("sku_1", request.contentItems[0].sku!!)
+        assertEquals("name_1", request.contentItems[0].productName!!)
+
+        assertEquals(2.99, request.contentItems[1].price!!, 0.00001)
+        assertEquals("sku_2", request.contentItems[1].sku!!)
+        assertEquals("name_2", request.contentItems[1].productName!!)
+
+        assertEquals(3, request.customData.size)
+        assertEquals(request.customData["key_1"], "value_1")
+        assertEquals(request.customData["key_3"], "value_3")
+
         attribution.eventSender.sendEvent(
                 name = "ADD_TO_CART",
                 eventData = null,
                 userData = UserData.create(appId),
-                deviceData = DeviceData.create(context)
-                        .copy(os = "iOS"),
+                deviceData = DeviceData.create(context),
                 customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
-                customItems = arrayOf("item_1", "item_2", "item_3", "item_4", "item_5")
+                contentItems = arrayOf(item1, item2)
         ) {
             deferredResult.complete(it)
         }

@@ -48,14 +48,13 @@ class EventSender(
             callback: ((Result<RAdSendEventData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
-        val request = SendEventRequest(
-                name = name,
-                sessionId = sessionStorage.sessionId,
-                userData = userData,
-                deviceData = deviceData,
-                eventData = eventData,
-                customData = customData,
-                contentItems = contentItems
+        val request = createRequest(
+                name,
+                userData,
+                deviceData,
+                eventData,
+                customData,
+                contentItems
         )
 
         scope.launch {
@@ -74,5 +73,26 @@ class EventSender(
                 }
             }
         }
+    }
+
+    @VisibleForTesting
+    internal fun createRequest(
+            name: String,
+            userData: UserData,
+            deviceData: DeviceData,
+            eventData: EventData?,
+            customData: CustomData,
+            contentItems: Array<ContentItem>
+    ): SendEventRequest {
+        val request = SendEventRequest(
+                name = name,
+                sessionId = sessionStorage.sessionId,
+                userData = userData,
+                deviceData = deviceData,
+                eventData = eventData,
+                customData = customData,
+                contentItems = contentItems
+        )
+        return request
     }
 }
