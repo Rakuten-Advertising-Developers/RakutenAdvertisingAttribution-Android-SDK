@@ -1,5 +1,6 @@
 package com.rakuten.attribution.sdk
 
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
@@ -35,13 +36,7 @@ class LinkResolver(
             callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
-
-        val request = ResolveLinkRequest(
-                firstSession = firstLaunchDetector.isFirstLaunch,
-                universalLinkUrl = link,
-                userData = userData,
-                deviceData = deviceData
-        )
+        val request = createRequest(link, userData, deviceData)
 
         scope.launch {
             try {
@@ -61,6 +56,28 @@ class LinkResolver(
                     callback?.invoke(Result.Error("Failed with error: ${e.message}"))
                 }
             }
+        }
+    }
+
+    @VisibleForTesting
+    internal fun createRequest(
+            link: String,
+            userData: UserData,
+            deviceData: DeviceData
+    ): ResolveLinkRequest {
+        val uri = Uri.parse(link)
+
+        return when (uri.scheme) {
+            "http", "https" -> ResolveLinkRequest(
+                    firstSession = firstLaunchDetector.isFirstLaunch,
+                    appLinkUrl = link,
+                    userData = userData,
+                    deviceData = deviceData)
+            else -> ResolveLinkRequest(
+                    firstSession = firstLaunchDetector.isFirstLaunch,
+                    linkIdentifier = uri.getQueryParameter("link_click_id") ?: "",
+                    userData = userData,
+                    deviceData = deviceData)
         }
     }
 }

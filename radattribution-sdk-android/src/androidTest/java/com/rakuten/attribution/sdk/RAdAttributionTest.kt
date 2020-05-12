@@ -8,6 +8,7 @@ import com.rakuten.attribution.sdk.network.EventData
 import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -44,7 +45,7 @@ class RAdAttributionTest {
     }
 
     @Test
-    fun resolveLink() = runBlocking {
+    fun resolveEmptyLink() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
 
         attribution.linkResolver.resolve(
@@ -59,16 +60,62 @@ class RAdAttributionTest {
     }
 
     @Test
+    fun resolveUri() = runBlocking {
+        val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
+        val uri = "test_scheme://open?link_click_id=1234"
+
+        val request = attribution.linkResolver.createRequest(uri,
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context))
+
+        assertEquals(request.appLinkUrl, "")
+        assertEquals(request.linkIdentifier, "1234")
+
+        attribution.linkResolver.resolve(
+                uri,
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context)
+        ) {
+            deferredResult.complete(it)
+        }
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
+    }
+
+    @Test
+    fun resolveAppLink() = runBlocking {
+        val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
+        val link = "https://rakutenadvertising.app.link/SVOVLqKrR5?%243p=a_rakuten_marketing"
+
+        val request = attribution.linkResolver.createRequest(link,
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context))
+
+        assertEquals(request.appLinkUrl, link)
+        assertEquals(request.linkIdentifier, "")
+
+        attribution.linkResolver.resolve(
+                link,
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context)
+        ) {
+            deferredResult.complete(it)
+        }
+        val result = deferredResult.await()
+        assertTrue(result is Result.Success)
+    }
+
+    @Test
     fun resolveLinkFail() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
 
         attribution.linkResolver.resolve(
-            "",
-            userData = UserData.create(appId),
-            deviceData = DeviceData.create(context)
-                .copy(
-                    os = "iOS"//set wrong iOS name to cause an error
-                )
+                "",
+                userData = UserData.create(appId),
+                deviceData = DeviceData.create(context)
+                        .copy(
+                                os = "iOS"//set wrong iOS name to cause an error
+                        )
         ) {
             deferredResult.complete(it)
         }
