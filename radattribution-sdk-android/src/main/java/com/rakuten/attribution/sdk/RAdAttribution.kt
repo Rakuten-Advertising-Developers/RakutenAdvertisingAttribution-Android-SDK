@@ -10,67 +10,89 @@ import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-class RAdAttribution(
-    context: Context,
-    private val configuration: Configuration
-) {
-    companion object {
-        val tag = RAdAttribution::class.java.simpleName
+object RAdAttribution {
+    private val TAG = RAdAttribution::class.java.simpleName
+    private const val ERROR = "You should call RAdAttribution.setup() before"
+
+    lateinit var context: Context
+    private lateinit var configuration: Configuration
+
+    fun setup(
+            context: Context,
+            configuration: Configuration) {
+        Log.i(TAG, "setup()")
+
+        this.context = context
+        this.configuration = configuration
+
+        tokenProvider = JwtProvider(
+                RAdAttribution.configuration.appId,
+                RAdAttribution.configuration.privateKey,
+                tokenStorage
+        )
+        sessionStorage = SessionStorage()
+        firstLaunchDetector = FirstLaunchDetector(RAdAttribution.context)
+
+        deviceData = DeviceData.create(RAdAttribution.context)
+        userData = UserData.create(RAdAttribution.configuration.appId)
+
+        eventSenderInternal = EventSender(
+                userData = userData,
+                deviceData = deviceData,
+                tokenProvider = tokenProvider,
+                sessionStorage = sessionStorage,
+                scope = coroutineScope
+        )
+
+        linkResolverInternal = LinkResolver(
+                userData = userData,
+                deviceData = deviceData,
+                tokenProvider = tokenProvider,
+                firstLaunchDetector = firstLaunchDetector,
+                sessionStorage = sessionStorage,
+                scope = coroutineScope
+        )
+
+        sendAppLaunchedEventIfNeeded()
+        validate()
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val tokenStorage = TokensStorage()
 
     @VisibleForTesting
-    val tokenProvider = JwtProvider(
-        configuration.appId,
-        configuration.privateKey,
-        tokenStorage
-    )
+    lateinit var tokenProvider: JwtProvider
 
-    private val sessionStorage = SessionStorage()
-    private val firstLaunchDetector = FirstLaunchDetector(context)
+    private lateinit var sessionStorage: SessionStorage
+    private lateinit var firstLaunchDetector: FirstLaunchDetector
 
-    private val deviceData = DeviceData.create(context)
-    private val userData = UserData.create(configuration.appId)
+    private lateinit var deviceData: DeviceData
+    private lateinit var userData: UserData
 
-    @VisibleForTesting
-    val eventSender: EventSender = EventSender(
-        userData = userData,
-        deviceData = deviceData,
-        tokenProvider = tokenProvider,
-        sessionStorage = sessionStorage,
-        scope = coroutineScope
-    )
-
-    @VisibleForTesting
-    val linkResolver: LinkResolver = LinkResolver(
-        userData = userData,
-        deviceData = deviceData,
-        tokenProvider = tokenProvider,
-        firstLaunchDetector = firstLaunchDetector,
-        sessionStorage = sessionStorage,
-        scope = coroutineScope
-    )
-
-    init {
-        sendAppLaunchedEventIfNeeded()
-        validate()
-    }
-
-    private fun validate(): Boolean {
-        return try {
-            tokenProvider.obtainToken()
-            true
-        } catch (e: Exception) {
-            Log.e(tag, "Configuration.validate() failed: ${e.message}")
-            false
+    private lateinit var eventSenderInternal: EventSender
+    val eventSender: EventSender
+        get() = if (::eventSenderInternal.isInitialized) {
+            eventSenderInternal
+        } else {
+            throw IllegalStateException(ERROR)
         }
+
+    private lateinit var linkResolverInternal: LinkResolver
+    val linkResolver: LinkResolver
+        get() = if (::linkResolverInternal.isInitialized) {
+            linkResolverInternal
+        } else {
+            throw IllegalStateException(ERROR)
+        }
+
+    private fun validate() {
+        tokenProvider.obtainToken()
     }
 
     private fun sendAppLaunchedEventIfNeeded() {
         if (configuration.isManualAppLaunch) {
-            linkResolver.resolve(link = "")
+            Log.i(TAG, "send app launched event")
+            linkResolverInternal.resolve(link = "")
         }
     }
 }
