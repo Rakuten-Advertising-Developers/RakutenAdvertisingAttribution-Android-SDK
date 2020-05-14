@@ -2,7 +2,6 @@ package com.rakuten.attribution.sdk
 
 import android.content.Context
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.jwt.TokensStorage
 import com.rakuten.attribution.sdk.network.DeviceData
@@ -10,25 +9,38 @@ import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
+/**
+An object that encapsulates various features of RAdAttribution SDK,
+like sending events and links resolving
+ */
 object RAdAttribution {
     private val TAG = RAdAttribution::class.java.simpleName
     private const val ERROR = "You should call RAdAttribution.setup() before"
 
-    lateinit var context: Context
+    private lateinit var context: Context
     private lateinit var configuration: Configuration
 
+    /**
+     *  Setups RAdAttribution SDK.
+     *  Should be called before SDK usage.
+     *
+     * @param context instance of Android Context class
+     * @param configuration an instance of Configuration class,
+     * filled with required info
+     */
     fun setup(
-            context: Context,
-            configuration: Configuration) {
+        context: Context,
+        configuration: Configuration
+    ) {
         Log.i(TAG, "setup()")
 
         this.context = context
         this.configuration = configuration
 
         tokenProvider = JwtProvider(
-                RAdAttribution.configuration.appId,
-                RAdAttribution.configuration.privateKey,
-                tokenStorage
+            RAdAttribution.configuration.appId,
+            RAdAttribution.configuration.privateKey,
+            tokenStorage
         )
         sessionStorage = SessionStorage()
         firstLaunchDetector = FirstLaunchDetector(RAdAttribution.context)
@@ -36,21 +48,22 @@ object RAdAttribution {
         deviceData = DeviceData.create(RAdAttribution.context)
         userData = UserData.create(RAdAttribution.configuration.appId)
 
+        //* instance of EventSender class with the ability to send events
         eventSenderInternal = EventSender(
-                userData = userData,
-                deviceData = deviceData,
-                tokenProvider = tokenProvider,
-                sessionStorage = sessionStorage,
-                scope = coroutineScope
+            userData = userData,
+            deviceData = deviceData,
+            tokenProvider = tokenProvider,
+            sessionStorage = sessionStorage,
+            scope = coroutineScope
         )
 
         linkResolverInternal = LinkResolver(
-                userData = userData,
-                deviceData = deviceData,
-                tokenProvider = tokenProvider,
-                firstLaunchDetector = firstLaunchDetector,
-                sessionStorage = sessionStorage,
-                scope = coroutineScope
+            userData = userData,
+            deviceData = deviceData,
+            tokenProvider = tokenProvider,
+            firstLaunchDetector = firstLaunchDetector,
+            sessionStorage = sessionStorage,
+            scope = coroutineScope
         )
 
         sendAppLaunchedEventIfNeeded()
@@ -60,8 +73,7 @@ object RAdAttribution {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val tokenStorage = TokensStorage()
 
-    @VisibleForTesting
-    lateinit var tokenProvider: JwtProvider
+    internal lateinit var tokenProvider: JwtProvider
 
     private lateinit var sessionStorage: SessionStorage
     private lateinit var firstLaunchDetector: FirstLaunchDetector
@@ -70,6 +82,8 @@ object RAdAttribution {
     private lateinit var userData: UserData
 
     private lateinit var eventSenderInternal: EventSender
+
+    /** instance of EventSender class with the ability to send events */
     val eventSender: EventSender
         get() = if (::eventSenderInternal.isInitialized) {
             eventSenderInternal
@@ -78,6 +92,8 @@ object RAdAttribution {
         }
 
     private lateinit var linkResolverInternal: LinkResolver
+
+    /** instance of LinkResolver class with the ability to resolve links */
     val linkResolver: LinkResolver
         get() = if (::linkResolverInternal.isInitialized) {
             linkResolverInternal

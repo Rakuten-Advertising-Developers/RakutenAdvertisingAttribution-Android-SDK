@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.annotation.VisibleForTesting
 
-class FirstLaunchDetector(context: Context) {
+internal class FirstLaunchDetector(context: Context) {
     companion object {
         const val NAME = "first_launch_prefs"
     }

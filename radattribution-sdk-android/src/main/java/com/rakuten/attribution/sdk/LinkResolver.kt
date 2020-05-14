@@ -12,13 +12,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LinkResolver(
-        private val userData: UserData,
-        private val deviceData: DeviceData,
-        private val tokenProvider: JwtProvider,
-        private val firstLaunchDetector: FirstLaunchDetector,
-        private val sessionStorage: SessionStorage,
-        private val scope: CoroutineScope
+/**
+ * A class that can resolve links via SDK
+ */
+class LinkResolver internal constructor(
+    private val userData: UserData,
+    private val deviceData: DeviceData,
+    private val tokenProvider: JwtProvider,
+    private val firstLaunchDetector: FirstLaunchDetector,
+    private val sessionStorage: SessionStorage,
+    private val scope: CoroutineScope
 ) {
     companion object {
         val tag = LinkResolver::class.java.simpleName
@@ -30,10 +33,10 @@ class LinkResolver(
 
     @VisibleForTesting
     fun resolve(
-            link: String,
-            userData: UserData,
-            deviceData: DeviceData,
-            callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
+        link: String,
+        userData: UserData,
+        deviceData: DeviceData,
+        callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
         val request = createRequest(link, userData, deviceData)
@@ -61,23 +64,25 @@ class LinkResolver(
 
     @VisibleForTesting
     internal fun createRequest(
-            link: String,
-            userData: UserData,
-            deviceData: DeviceData
+        link: String,
+        userData: UserData,
+        deviceData: DeviceData
     ): ResolveLinkRequest {
         val uri = Uri.parse(link)
 
         return when (uri.scheme) {
             "http", "https" -> ResolveLinkRequest(
-                    firstSession = firstLaunchDetector.isFirstLaunch,
-                    appLinkUrl = link,
-                    userData = userData,
-                    deviceData = deviceData)
+                firstSession = firstLaunchDetector.isFirstLaunch,
+                appLinkUrl = link,
+                userData = userData,
+                deviceData = deviceData
+            )
             else -> ResolveLinkRequest(
-                    firstSession = firstLaunchDetector.isFirstLaunch,
-                    linkIdentifier = uri.getQueryParameter("link_click_id") ?: "",
-                    userData = userData,
-                    deviceData = deviceData)
+                firstSession = firstLaunchDetector.isFirstLaunch,
+                linkIdentifier = uri.getQueryParameter("link_click_id") ?: "",
+                userData = userData,
+                deviceData = deviceData
+            )
         }
     }
 }

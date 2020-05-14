@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm
 import java.security.KeyFactory
 import java.security.spec.PKCS8EncodedKeySpec
 
-class JwtProvider(
+internal class JwtProvider(
     private val appId: String,
     private val secretKey: String,
     private val tokenStorage: TokensStorage

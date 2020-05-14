@@ -26,11 +26,11 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-val logging = HttpLoggingInterceptor().apply {
+private val logging = HttpLoggingInterceptor().apply {
     level = HttpLoggingInterceptor.Level.BODY
 }
 
-val httpClient: OkHttpClient = OkHttpClient.Builder().apply {
+private val httpClient: OkHttpClient = OkHttpClient.Builder().apply {
     addInterceptor(logging)
 }.build()
 

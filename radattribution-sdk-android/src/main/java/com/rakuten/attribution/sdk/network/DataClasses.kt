@@ -7,6 +7,9 @@ import android.provider.Settings
 import com.rakuten.attribution.sdk.BuildConfig
 import com.squareup.moshi.Json
 
+/**
+ * A class that represents info about user's device
+ */
 data class DeviceData(
     val os: String,
     @Json(name = "os_version") val osVersion: String,
@@ -17,6 +20,12 @@ data class DeviceData(
     @Json(name = "is_simulator") val isSimulator: Boolean
 ) {
     companion object {
+        /**
+         * Creates DeviceData class from Android's Context instance
+         *
+         * @param context Android's Context instance
+         * @return
+         */
         fun create(context: Context): DeviceData {
             val deviceId = Settings.Secure.getString(//todo: discuss
                 context.contentResolver,
@@ -35,6 +44,9 @@ data class DeviceData(
     }
 }
 
+/**
+ * A class that represents details of event data
+ */
 data class EventData(
     @Json(name = "transaction_id") val transactionId: String?,
     @Json(name = "search_query") val searchQuery: String?,
@@ -47,6 +59,10 @@ data class EventData(
     val description: String?
 )
 
+
+/**
+ * A class that represents purchased item info
+ */
 data class ContentItem(
         @Json(name = "\$sku") val sku: String?,
         @Json(name = "\$price") val price: Double?,
@@ -54,6 +70,9 @@ data class ContentItem(
         @Json (name = "\$quantity") val quantity:Int?
 )
 
+/**
+ * A class that represents user specific data
+ */
 data class UserData(
     @Json(name = "bundle_identifier") val applicationId: String,
     @Json(name = "app_version") val versionName: String,
@@ -70,4 +89,7 @@ data class UserData(
     }
 }
 
+/**
+ * A dictionary to put custom data associated with event
+ */
 typealias CustomData = Map<String, String>

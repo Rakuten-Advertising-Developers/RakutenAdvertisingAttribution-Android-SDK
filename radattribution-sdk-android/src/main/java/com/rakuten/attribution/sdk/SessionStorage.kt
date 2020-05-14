@@ -1,6 +1,6 @@
 package com.rakuten.attribution.sdk
 
-class SessionStorage {
+internal class SessionStorage {
     private var internalSessionId: String? = null
     val sessionId: String? = internalSessionId
 

@@ -1,6 +1,6 @@
 package com.rakuten.attribution.sdk.jwt
 
-class TokensStorage() {
+internal class TokensStorage {
     private var internalToken: Token? = null
     val token: Token? = internalToken
 
@@ -19,7 +19,7 @@ class TokensStorage() {
     }
 }
 
-data class Token(
+internal data class Token(
     val value: String,
     val expires: Long
 )
