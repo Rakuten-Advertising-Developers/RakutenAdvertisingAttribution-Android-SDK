@@ -1,7 +1,23 @@
+plugins {
+    id("maven-publish")
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'maven-publish'
+
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+def getVersionName = { ->
+    return "0.0.1"
+}
+
+def getArtifactId = { ->
+    return "radattribution-sdk-android"
+}
 
 android {
     compileSdkVersion 29
@@ -11,7 +27,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "0.0.1"
+        versionName  = getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -33,6 +49,28 @@ android {
         includes = ["../README.md"]
         sourceRoot {
             path = "src/main/"
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+
+        }
+    }
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.rakuten.attribution'
+            artifactId getArtifactId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
         }
     }
 }
