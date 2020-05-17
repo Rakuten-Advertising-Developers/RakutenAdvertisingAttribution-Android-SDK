@@ -2,6 +2,8 @@ package com.rakuten.attribution.sdk.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.rakuten.attribution.sdk.DeviceData
+import com.rakuten.attribution.sdk.UserData
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test

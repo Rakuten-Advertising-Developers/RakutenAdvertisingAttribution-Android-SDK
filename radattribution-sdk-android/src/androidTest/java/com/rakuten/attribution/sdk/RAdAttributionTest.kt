@@ -3,10 +3,6 @@ package com.rakuten.attribution.sdk
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.rakuten.attribution.sdk.network.ContentItem
-import com.rakuten.attribution.sdk.network.DeviceData
-import com.rakuten.attribution.sdk.network.EventData
-import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -144,8 +140,18 @@ class RAdAttributionTest {
     fun sendEventWithCustomData() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
 
-        val item1 = ContentItem(sku = "sku_1", price = 1.99, productName = "name_1", quantity = 1)
-        val item2 = ContentItem(sku = "sku_2", price = 2.99, productName = "name_2", quantity = 2)
+        val item1 = ContentItem(
+            sku = "sku_1",
+            price = 1.99,
+            productName = "name_1",
+            quantity = 1
+        )
+        val item2 = ContentItem(
+            sku = "sku_2",
+            price = 2.99,
+            productName = "name_2",
+            quantity = 2
+        )
 
         val request = RAdAttribution.eventSender.createRequest(
                 name = "ADD_TO_CART",
@@ -189,15 +195,15 @@ class RAdAttributionTest {
         val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
 
         val eventData = EventData(
-                transactionId = "123",
-                searchQuery = "test_query",
-                currency = "USD",
-                revenue = 0.5,
-                shipping = 0.6,
-                tax = 0.7,
-                coupon = "test_coupon",
-                affiliation = "test_affiliation",
-                description = "test_description"
+            transactionId = "123",
+            searchQuery = "test_query",
+            currency = "USD",
+            revenue = 0.5,
+            shipping = 0.6,
+            tax = 0.7,
+            coupon = "test_coupon",
+            affiliation = "test_affiliation",
+            description = "test_description"
         )
         RAdAttribution.eventSender.sendEvent(
                 name = "ADD_TO_CART",

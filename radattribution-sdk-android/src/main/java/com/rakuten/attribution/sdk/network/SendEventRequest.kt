@@ -1,5 +1,6 @@
 package com.rakuten.attribution.sdk.network
 
+import com.rakuten.attribution.sdk.*
 import com.squareup.moshi.Json
 
 internal class SendEventRequest(

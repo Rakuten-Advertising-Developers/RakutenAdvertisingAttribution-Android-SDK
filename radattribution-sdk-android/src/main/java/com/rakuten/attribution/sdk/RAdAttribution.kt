@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.jwt.TokensStorage
-import com.rakuten.attribution.sdk.network.DeviceData
-import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 

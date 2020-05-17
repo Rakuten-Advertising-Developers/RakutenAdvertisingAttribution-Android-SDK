@@ -11,13 +11,7 @@ apply plugin: 'maven-publish'
 def githubProperties = new Properties()
 githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 
-def getVersionName = { ->
-    return "0.0.1"
-}
-
-def getArtifactId = { ->
-    return "radattribution-sdk-android"
-}
+def versionName = "0.0.1"
 
 android {
     compileSdkVersion 29
@@ -27,7 +21,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName  = getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -44,7 +37,7 @@ android {
     }
     dokka {
         outputFormat = 'html'
-        outputDirectory = "$buildDir/javadoc"
+        outputDirectory = "../docs"
         reportUndocumented = true
         includes = ["../README.md"]
         sourceRoot {
@@ -57,20 +50,19 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/pashashmigol/radattribution-sdk-android")
+            url = uri("https://maven.pkg.github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android")
             credentials {
                 username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
                 password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
             }
-
         }
     }
     publications {
         bar(MavenPublication) {
-            groupId 'com.rakuten.attribution'
-            artifactId getArtifactId()
-            version getVersionName()
-            artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
+            groupId 'com.rakuten.advertising'
+            artifactId 'attribution-sdk'
+            version versionName
+            artifact("$buildDir/outputs/aar/radattribution-sdk-android-release.aar")
         }
     }
 }
@@ -100,7 +92,6 @@ dependencies {
 
     // Retrofit Coroutines Support
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
-
 
     api 'io.jsonwebtoken:jjwt-api:0.11.1'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'

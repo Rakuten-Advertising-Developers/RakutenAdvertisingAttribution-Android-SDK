@@ -1,10 +1,9 @@
-package com.rakuten.attribution.sdk.network
+package com.rakuten.attribution.sdk
 
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings
-import com.rakuten.attribution.sdk.BuildConfig
 import com.squareup.moshi.Json
 
 /**

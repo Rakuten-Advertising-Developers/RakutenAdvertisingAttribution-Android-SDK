@@ -4,10 +4,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
-import com.rakuten.attribution.sdk.network.DeviceData
 import com.rakuten.attribution.sdk.network.RAdApi
 import com.rakuten.attribution.sdk.network.ResolveLinkRequest
-import com.rakuten.attribution.sdk.network.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
