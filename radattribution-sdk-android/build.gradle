@@ -36,7 +36,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dokka {
-        outputFormat = 'html'
+        outputFormat = 'gfm'
         outputDirectory = "../docs"
         reportUndocumented = true
         includes = ["../README.md"]
