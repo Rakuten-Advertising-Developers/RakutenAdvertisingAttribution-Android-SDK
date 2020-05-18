@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>radattribution-sdk-android</title>
+<link rel="stylesheet" href="../style.css">
+</HEAD>
+<BODY>
+<a href="./index.html">radattribution-sdk-android</a><br/>
+<br/>
+<h2>RADAttribution Android SDK</h2>
+<p>Rakuten advertising attribution SDK allows advertisers to track app installs and in-app conversion events using any affiliate link promoted within a publisher’s mobile app or on a mobile web page.</p>
+<h3>Requires Android API level 21+</h3>
+<h2>Add the RADAttribution SDK into your project</h2>
+<h2>Create public/private key pairs</h2>
+<p>Our SDK internally uses a private key to sign a JSON Web Token(JWT).
+This token is passed to our Attribution backend system to verify the SDK's identity. </p>
+<p>Generate public/private key pairs with the following commands</p>
+<pre><code class="lang-sh">openssl genpkey -algorithm RSA -out rad_rsa_private.pem -pkeyopt rsa_keygen_bits:256
+openssl rsa -in rad_rsa_private.pem -pubout -out rad_rsa_public.pem
+</code></pre>
+<p>This command will create the following two files.</p>
+<ol><li>rad_rsa_private.pem: Store this private key securely.</li>
+<li>rad_rsa_public.pem: This file is required by Rakuten Attribution backend platform to verify the signature of the authentication JWT. 
+(Public key handover process will be communicated separately)</li>
+</ol>
+<h4>Setup RADAttribution SDK initialization</h4>
+<pre><code class="lang-kotlin">// create Configuration class instance with the private key and unique application id 
+val configuration = Configuration(
+                appId = context.packageName,
+                privateKey = your_private_key,
+                isManualAppLaunch = false
+        )
+RAdAttribution.setup(context, configuration)
+</code></pre>
+<h4>Handling INSTALL and OPEN events along with deeplink data</h4>
+<p>RAdAttribution SDK provides a function to track app install and open events by itself. It also provides an ability to handle  deep link data if any associated with the affiliate link promoted within a publisher’s mobile app or on a mobile web page.</p>
+<p>Simply call the <code>RADAttribution.linkResolver.resolve()</code> method whenever Android app is brought to foreground.</p>
+<p>To initialize  your Application call use:</p>
+<pre><code class="lang-kotlin">override fun onCreate() {
+        super.onCreate()
+
+        val secretKey = assets
+                .open("private_key")
+                .bufferedReader()
+                .use { it.readText() }
+
+        val configuration = Configuration(
+                appId = BuildConfig.APPLICATION_ID,
+                privateKey = secretKey,
+                isManualAppLaunch = false
+        )
+        RAdAttribution.setup(this, configuration)
+    }
+</code></pre>
+<h3>Packages</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="com.rakuten.attribution.sdk/index.html">com.rakuten.attribution.sdk</a></p>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Index</h3>
+<a href="alltypes/index.html">All Types</a>
+</BODY>
+</HTML>
