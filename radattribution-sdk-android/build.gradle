@@ -39,9 +39,11 @@ android {
         outputFormat = 'html'
         outputDirectory = "../docs"
         reportUndocumented = true
+        skipEmptyPackages = true
+        noStdlibLink = false
         includes = ["../README.md"]
         sourceRoot {
-            path = "src/main/"
+            path = "src/main/java/com/rakuten/attribution/sdk"
         }
         doLast {
             copy {
