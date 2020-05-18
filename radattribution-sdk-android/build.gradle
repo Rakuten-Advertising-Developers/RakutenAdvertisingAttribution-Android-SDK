@@ -41,7 +41,7 @@ android {
         reportUndocumented = true
         skipEmptyPackages = true
         noStdlibLink = false
-        includes = ["../README.md"]
+        includes = ["../README.md", 'packages.md']
         sourceRoot {
             path = "src/main/java/com/rakuten/attribution/sdk"
         }

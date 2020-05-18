@@ -21,9 +21,9 @@ This command will create the following two files.
 (Public key handover process will be communicated separately)
 
 #### Setup RADAttribution SDK initialization
-To start working with RADAttribution SDK you need to create an instance of Configuration class. 
+To start working with RADAttribution SDK you need to create an instance of [com.rakuten.attribution.sdk.Configuration][Configuration] class. 
 It's constructor takes three parameters: 
- - appId (unique android application id. You can get it from any Context class instance of your appilication)
+ - appId (unique android application id. You can get it from any Context class instance of your application)
  - privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
  - isManualAppLaunch (flag that indicates if application was opened from link with the associated domain)
 ```kotlin
@@ -43,7 +43,7 @@ RAdAttribution.setup(context, configuration)
 
 Radattribution SDK provides a way to send events.
 
-To send evend to server you have to call sendEvent() method of EventSender sdk class. 
+To send event to server you have to call sendEvent() method of EventSender sdk class. 
 The only required parameter of this method is 'name'
 ```kotlin
 RAdAttribution.eventSender.sendEvent(name = "PURCHASE")
@@ -59,12 +59,12 @@ val eventData = EventData(
              shipping = 0.0,
              tax = 0.8,
              coupon = "coupon_test_code",
-             affiliation = "affilation code",
+             affiliation = "affiliation code",
              description = "description"
      ) 
 ``` 
 
-and/or array of ContentItem insances. ContentItem class contains info related to purchase items, like price, tax, etc. 
+and/or array of ContentItem instances. ContentItem class contains info related to purchase items, like price, tax, etc. 
 ```kotlin
 val contentItems = arrayOf(
                 ContentItem(
@@ -79,8 +79,8 @@ val contentItems = arrayOf(
 Also you can pass data with CustomData class, which is just alias for Map<String, String> 
 ```kotlin
 val customData = mapOf(
-                "customkey1" to "value1",
-                "customekey2" to "value2"
+                "custom_key1" to "value1",
+                "custom_key2" to "value2"
         )
 ```
 
@@ -120,7 +120,7 @@ To let operation system know that your application is able open http ans https l
 ```
 Now links like  "https://rakutenadvertising.app.link/..." and "http://rakutenadvertising.app.link/..." will be prompted to open with your application.
 
-Also you can specify suctom app scheme instead of "http" and "https". For example it's "demo_app" for our demo application. 
+Also you can specify custom app scheme instead of "http" and "https". For example it's "demo_app" for our demo application. 
 You can put your application scheme to your gradle.build in buildTypes section like this
 ```groovy
  buildTypes {
@@ -160,7 +160,7 @@ private fun handleIntent(intent: Intent) {
     }
 ```
 
-If it so we can resolve deep link with resolveLink() method. There is only one required paramter - link to resolve.
+If it so we can resolve deep link with resolveLink() method. There is only one required parameter - link to resolve.
 And optional lambda callback. 
 ```kotlin
 private fun resolveLink(link: String) {
@@ -176,7 +176,7 @@ private fun resolveLink(link: String) {
 ```
 
 #### Demo app
-We provide a sample app that demonstrate the use of the Rakuten Advertising attribution SDK. You can find the open source application at this Git Repsitory
+We provide a sample app that demonstrate the use of the Rakuten Advertising attribution SDK. You can find the open source application at this Git Repository
 * [RAd Advertiser Demo](https://github.com/Rakuten-Advertising-Developers/radadvertiser-demo-android)
 
 
