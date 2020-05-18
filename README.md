@@ -21,7 +21,7 @@ This command will create the following two files.
 (Public key handover process will be communicated separately)
 
 #### Setup RADAttribution SDK initialization
-To start working with RADAttribution SDK you need to create an instance of [com.rakuten.attribution.sdk.Configuration][Configuration] class. 
+To start working with RADAttribution SDK you need to create an instance of [Configuration][com.rakuten.attribution.sdk.Configuration] class. 
 It's constructor takes three parameters: 
  - appId (unique android application id. You can get it from any Context class instance of your application)
  - privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
@@ -34,7 +34,7 @@ val configuration = Configuration(
         )
 ```
 
-Then you need to initiate RAdAttribution object with you application's context class and created Configuration instance
+Then you need to initiate [RAdAttribution][com.rakuten.attribution.sdk.RAdAttribution] object with you application's context class and created Configuration instance
 ```kotlin
 RAdAttribution.setup(context, configuration)
 ```
@@ -49,7 +49,7 @@ The only required parameter of this method is 'name'
 RAdAttribution.eventSender.sendEvent(name = "PURCHASE")
 ```
 
-Optionally you can pass an instance of EventData class, with event's metadata. 
+Optionally you can pass an instance of [EventData][com.rakuten.attribution.sdk.EventData] class, with event's metadata. 
 ```kotlin
 val eventData = EventData(
              transactionId = "112233",
@@ -64,7 +64,7 @@ val eventData = EventData(
      ) 
 ``` 
 
-and/or array of ContentItem instances. ContentItem class contains info related to purchase items, like price, tax, etc. 
+and/or array of ContentItem instances. [ContentItem][com.rakuten.attribution.sdk.ContentItem] class contains info related to purchase items, like price, tax, etc. 
 ```kotlin
 val contentItems = arrayOf(
                 ContentItem(
@@ -76,7 +76,7 @@ val contentItems = arrayOf(
         )
 ```
 
-Also you can pass data with CustomData class, which is just alias for Map<String, String> 
+Also you can pass data with [CustomData][com.rakuten.attribution.sdk.CustomData] class, which is just alias for Map<String, String> 
 ```kotlin
 val customData = mapOf(
                 "custom_key1" to "value1",
