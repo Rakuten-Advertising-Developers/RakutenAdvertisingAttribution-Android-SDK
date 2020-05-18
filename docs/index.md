@@ -26,7 +26,7 @@ This command will create the following two files.
 
 #### Setup RADAttribution SDK initialization
 
-To start working with RADAttribution SDK you need to create an instance of [com.rakuten.attribution.sdk.Configuration](com.rakuten.attribution.sdk/-configuration/index.md) class. 
+To start working with RADAttribution SDK you need to create an instance of [Configuration](com.rakuten.attribution.sdk/-configuration/index.md) class. 
 It's constructor takes three parameters:
 
 * appId (unique android application id. You can get it from any Context class instance of your application)
@@ -41,7 +41,7 @@ val configuration = Configuration(
         )
 ```
 
-Then you need to initiate RAdAttribution object with you application's context class and created Configuration instance
+Then you need to initiate [RAdAttribution](com.rakuten.attribution.sdk/-r-ad-attribution/index.md) object with you application's context class and created Configuration instance
 
 ``` kotlin
 RAdAttribution.setup(context, configuration)
@@ -58,7 +58,7 @@ The only required parameter of this method is 'name'
 RAdAttribution.eventSender.sendEvent(name = "PURCHASE")
 ```
 
-Optionally you can pass an instance of EventData class, with event's metadata.
+Optionally you can pass an instance of [EventData](com.rakuten.attribution.sdk/-event-data/index.md) class, with event's metadata.
 
 ``` kotlin
 val eventData = EventData(
@@ -74,7 +74,7 @@ val eventData = EventData(
      ) 
 ```
 
-and/or array of ContentItem instances. ContentItem class contains info related to purchase items, like price, tax, etc.
+and/or array of ContentItem instances. [ContentItem](com.rakuten.attribution.sdk/-content-item/index.md) class contains info related to purchase items, like price, tax, etc.
 
 ``` kotlin
 val contentItems = arrayOf(
@@ -87,7 +87,7 @@ val contentItems = arrayOf(
         )
 ```
 
-Also you can pass data with CustomData class, which is just alias for Map&lt;String, String&gt;
+Also you can pass data with [CustomData](com.rakuten.attribution.sdk/-custom-data.md) class, which is just alias for Map&lt;String, String&gt;
 
 ``` kotlin
 val customData = mapOf(
