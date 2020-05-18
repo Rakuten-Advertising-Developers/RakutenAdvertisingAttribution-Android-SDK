@@ -43,6 +43,13 @@ android {
         sourceRoot {
             path = "src/main/"
         }
+        doLast {
+            copy {
+                from "../docs/radattribution-sdk-android"
+                into "../docs"
+            }
+            delete "../docs/radattribution-sdk-android"
+        }
     }
 }
 
