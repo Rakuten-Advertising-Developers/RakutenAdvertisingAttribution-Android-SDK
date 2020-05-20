@@ -6,12 +6,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.dokka-android'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-def githubProperties = new Properties()
-githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
-
-def versionName = "0.0.1"
+group = 'io.github.rakuten-advertising-developers'
+version = "0.0.1"
 
 android {
     compileSdkVersion 29
@@ -53,27 +52,82 @@ android {
             delete "../docs/radattribution-sdk-android"
         }
     }
+    libraryVariants.all { variant ->
+            variant.mergeAssetsProvider.configure {
+                doLast {
+                    delete(fileTree(dir: outputDir))
+                }
+            }
+    }
 }
 
-publishing {
+uploadArchives {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android")
-            credentials {
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
+            }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            pom.project {
+                name "Attribution SDK"
+                packaging 'aar'
+                description 'attribution sdk artifact'
+                artifactId "attribution-sdk"
+                url 'https://github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android'
+                scm {
+                    url 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
+                    connection 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
+                    developerConnection 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
+                }
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'shmyhol'
+                        name 'Pavlo Shmyhol'
+                    }
+                }
             }
         }
     }
-    publications {
-        bar(MavenPublication) {
-            groupId 'com.rakuten.advertising'
-            artifactId 'attribution-sdk'
-            version versionName
-            artifact("$buildDir/outputs/aar/radattribution-sdk-android-release.aar")
-        }
-    }
+}
+
+artifacts {
+    archives file: file("$buildDir/outputs/aar/radattribution-sdk-android-release.aar"),
+            name: 'radattribution-sdk',
+            type: 'aar',
+            classifier: "aar"
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("../javadoc/")
+    failOnError false
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc.destinationDir
+}
+//Creating sources with comments
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+signing {
+    sign configurations.archives
 }
 
 dependencies {
