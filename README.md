@@ -20,8 +20,30 @@ This command will create the following two files.
 2. rad_rsa_public.pem: This file is required by Rakuten Attribution backend platform to verify the signature of the authentication JWT. 
 (Public key handover process will be communicated separately)
 
-#### Setup RADAttribution SDK initialization
-To start working with RADAttribution SDK you need to create an instance of [Configuration][com.rakuten.attribution.sdk.Configuration] class. 
+
+#### Add RAdAttribution SDK to project
+To use RAdAttribution SDK you need to add this string to 'dependencies' section in build.gradle file of your application module.
+```groovy
+dependencies {
+    //...
+    implementation 'com.rakuten.advertising:attribution-sdk:0.0.1'
+}
+```
+and also you need to add mavenCentral to repositories list on you root build.gradle file 
+```groovy
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
+```
+Now you can  sync your project and start working with RAdAttribution SDK
+}
+
+#### Setup RAdAttribution SDK initialization
+To start working with RAdAttribution SDK you need to create an instance of [Configuration][com.rakuten.attribution.sdk.Configuration] class. 
 It's constructor takes three parameters: 
  - appId (unique android application id. You can get it from any Context class instance of your application)
  - privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
