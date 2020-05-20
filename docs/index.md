@@ -31,7 +31,7 @@ To use RAdAttribution SDK you need to add this string to 'dependencies' section 
 ``` groovy
 dependencies {
     //...
-    implementation 'com.rakuten.advertising:attribution-sdk:0.0.1'
+    implementation 'com.rakuten.advertising:attribution-sdk:0.0.2'
 }
 ```
 
@@ -58,12 +58,14 @@ It's constructor takes three parameters:
 * appId (unique android application id. You can get it from any Context class instance of your application)
 * privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
 * isManualAppLaunch (flag that indicates if application was opened from link with the associated domain)
+* endpointUrl (url which sdk will send analytics to)
 
 ``` kotlin
 val configuration = Configuration(
-                appId = context.packageName,
-                privateKey = your_private_key,
-                isManualAppLaunch = false
+            appId = context.packageName,
+            privateKey = secretKey,
+            isManualAppLaunch = false,
+            endpointUrl = ""
         )
 ```
 

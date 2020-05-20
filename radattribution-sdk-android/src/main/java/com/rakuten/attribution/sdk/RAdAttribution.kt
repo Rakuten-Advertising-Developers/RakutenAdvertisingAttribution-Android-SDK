@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.jwt.TokensStorage
+import com.rakuten.attribution.sdk.network.RAdApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -63,6 +64,8 @@ object RAdAttribution {
             sessionStorage = sessionStorage,
             scope = coroutineScope
         )
+
+        RAdApi.init(endpointUrl = configuration.endpointUrl)
 
         sendAppLaunchedEventIfNeeded()
         validate()

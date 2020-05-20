@@ -16,7 +16,7 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-private const val BASE_URL = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/"
+//private const val BASE_URL = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -33,17 +33,6 @@ private val logging = HttpLoggingInterceptor().apply {
 private val httpClient: OkHttpClient = OkHttpClient.Builder().apply {
     addInterceptor(logging)
 }.build()
-
-/**
- * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
- * object.
- */
-private val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .client(httpClient)
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-    .build()
 
 internal interface RAdAPIService {
     @POST("resolve-link")
@@ -65,6 +54,17 @@ internal interface RAdAPIService {
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
 internal object RAdApi {
+    private lateinit var retrofit: Retrofit
+
+    fun init(endpointUrl: String) {
+        retrofit = Retrofit.Builder()
+            .baseUrl(endpointUrl)
+            .client(httpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
+    }
+
     val retrofitService: RAdAPIService by lazy {
         retrofit.create(
             RAdAPIService::class.java

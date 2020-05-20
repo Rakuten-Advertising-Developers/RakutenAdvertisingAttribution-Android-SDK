@@ -10,7 +10,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'io.github.rakuten-advertising-developers'
-version = "0.0.1"
+version = "0.0.2"
 
 android {
     compileSdkVersion 29
@@ -30,9 +30,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    defaultConfig {
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dokka {
         outputFormat = 'gfm'
