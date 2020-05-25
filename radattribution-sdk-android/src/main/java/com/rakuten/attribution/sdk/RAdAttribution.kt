@@ -45,7 +45,7 @@ object RAdAttribution {
         firstLaunchDetector = FirstLaunchDetector(RAdAttribution.context)
 
         deviceData = DeviceData.create(RAdAttribution.context)
-        userData = UserData.create(RAdAttribution.configuration.appId)
+        userData = UserData.create(RAdAttribution.configuration.appId, configuration.appVersion)
 
         //* instance of EventSender class with the ability to send events
         eventSenderInternal = EventSender(

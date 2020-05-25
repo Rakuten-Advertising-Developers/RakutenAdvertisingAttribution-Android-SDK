@@ -73,16 +73,16 @@ data class ContentItem(
  * A class that represents user specific data
  */
 data class UserData(
-    @Json(name = "bundle_identifier") val applicationId: String,
-    @Json(name = "app_version") val versionName: String,
-    @Json(name = "sdk_version") val sdkVersion: String
+        @Json(name = "bundle_identifier") val applicationId: String,
+        @Json(name = "app_version") val applicationVersion: String,
+        @Json(name = "sdk_version") val sdkVersion: String
 ) {
     companion object {
-        fun create(appId: String): UserData {
+        fun create(appId: String, appVersion: String): UserData {
             return UserData(
                 applicationId = appId,
-                versionName = BuildConfig.VERSION_NAME,
-                sdkVersion = BuildConfig.VERSION_NAME
+                applicationVersion = appVersion,
+                sdkVersion = BuildConfig.SDK_VERSION
             )
         }
     }

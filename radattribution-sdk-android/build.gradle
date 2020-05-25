@@ -10,7 +10,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'io.github.rakuten-advertising-developers'
-version = "0.0.2"
+version = "0.0.3"
 
 android {
     compileSdkVersion 29
@@ -29,6 +29,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        buildTypes.each {
+            it.buildConfigField "String", "SDK_VERSION", "\"$version\""
         }
     }
     dokka {
@@ -50,11 +53,11 @@ android {
         }
     }
     libraryVariants.all { variant ->
-            variant.mergeAssetsProvider.configure {
-                doLast {
-                    delete(fileTree(dir: outputDir))
-                }
+        variant.mergeAssetsProvider.configure {
+            doLast {
+                delete(fileTree(dir: outputDir))
             }
+        }
     }
 }
 

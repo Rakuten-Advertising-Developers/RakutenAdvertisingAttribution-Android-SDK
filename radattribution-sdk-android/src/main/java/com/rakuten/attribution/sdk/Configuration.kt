@@ -11,6 +11,7 @@ package com.rakuten.attribution.sdk
  */
 data class Configuration(
     val appId: String,
+    val appVersion: String,
     val privateKey: String,
     val isManualAppLaunch: Boolean,
     val endpointUrl: String
