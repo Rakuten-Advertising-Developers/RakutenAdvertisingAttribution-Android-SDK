@@ -20,8 +20,8 @@ This command will create the following two files.
 2. rad_rsa_public.pem: This file is required by Rakuten Attribution backend platform to verify the signature of the authentication JWT. 
 (Public key handover process will be communicated separately)
 
-#### Add RAdAttribution SDK to project
-To use RAdAttribution SDK you need to add this string to 'dependencies' section in build.gradle file of your application module.
+#### Add RakutenAdvertisingAttribution SDK to project
+To use RakutenAdvertisingAttribution SDK you need to add this string to 'dependencies' section in build.gradle file of your application module.
 ```groovy
 dependencies {
     //...
@@ -38,11 +38,11 @@ allprojects {
     }
 }
 ```
-Now you can  sync your project and start working with RAdAttribution SDK
+Now you can  sync your project and start working with RakutenAdvertisingAttribution SDK
 }
 
-#### Setup RAdAttribution SDK initialization
-To start working with RAdAttribution SDK you need to create an instance of [Configuration][com.rakuten.attribution.sdk.Configuration] class. 
+#### Setup RakutenAdvertisingAttribution SDK initialization
+To start working with RakutenAdvertisingAttribution SDK you need to create an instance of [Configuration][com.rakuten.attribution.sdk.Configuration] class. 
 It's constructor takes three parameters: 
  - appId (unique android application id. You can get it from any Context class instance of your application)
  - appVersion (your application version name, '1.0' for example)
@@ -60,9 +60,9 @@ It's constructor takes three parameters:
         )
 ```
 
-Then you need to initiate [RAdAttribution][com.rakuten.attribution.sdk.RAdAttribution] object with you application's context class and created Configuration instance
+Then you need to initiate [RakutenAdvertisingAttribution][com.rakuten.attribution.sdk.RakutenAdvertisingAttribution] object with you application's context class and created Configuration instance
 ```kotlin
-RAdAttribution.setup(context, configuration)
+RakutenAdvertisingAttribution.setup(context, configuration)
 ```
 
 #### Send events with metadata
@@ -72,7 +72,7 @@ Radattribution SDK provides a way to send events.
 To send event to server you have to call sendEvent() method of EventSender sdk class. 
 The only required parameter of this method is 'name'
 ```kotlin
-RAdAttribution.eventSender.sendEvent(name = "PURCHASE")
+RakutenAdvertisingAttribution.eventSender.sendEvent(name = "PURCHASE")
 ```
 
 Optionally you can pass an instance of [EventData][com.rakuten.attribution.sdk.EventData] class, with event's metadata. 
@@ -114,7 +114,7 @@ Optionally you can pass lambda to be called on operation result.
 
 So your sendEvent() call might look like this 
 ```kotlin
-  RAdAttribution.eventSender.sendEvent(
+  RakutenAdvertisingAttribution.eventSender.sendEvent(
                 name = action,
                 customData = customData,
                 eventData = eventData,
@@ -190,7 +190,7 @@ If it so we can resolve deep link with resolveLink() method. There is only one r
 And optional lambda callback. 
 ```kotlin
 private fun resolveLink(link: String) {
-        RAdAttribution.linkResolver.resolve(link) {
+        RakutenAdvertisingAttribution.linkResolver.resolve(link) {
             when (it) {
                 is Result.Success -> {
                 }

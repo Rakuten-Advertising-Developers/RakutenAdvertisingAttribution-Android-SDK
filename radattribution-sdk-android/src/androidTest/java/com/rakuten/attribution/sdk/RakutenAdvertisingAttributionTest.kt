@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RAdAttributionTest {
+class RakutenAdvertisingAttributionTest {
     private lateinit var context: Context
     private lateinit var appId: String
     private lateinit var appVersion: String
@@ -35,12 +35,12 @@ class RAdAttributionTest {
                 isManualAppLaunch = false,
                 endpointUrl = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/"
         )
-        RAdAttribution.setup(context, configuration)
+        RakutenAdvertisingAttribution.setup(context, configuration)
     }
 
     @Test
     fun obtainToken() {
-        val token = RAdAttribution.tokenProvider.obtainToken()
+        val token = RakutenAdvertisingAttribution.tokenProvider.obtainToken()
         assertTrue("token is not generated", token.isNotBlank())
     }
 
@@ -48,7 +48,7 @@ class RAdAttributionTest {
     fun resolveEmptyLink() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
 
-        RAdAttribution.linkResolver.resolve(
+        RakutenAdvertisingAttribution.linkResolver.resolve(
                 "",
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -64,7 +64,7 @@ class RAdAttributionTest {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
         val uri = "test_scheme://open?link_click_id=1234"
 
-        val request = RAdAttribution.linkResolver.createRequest(
+        val request = RakutenAdvertisingAttribution.linkResolver.createRequest(
                 uri,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -73,7 +73,7 @@ class RAdAttributionTest {
         assertEquals(request.appLinkUrl, "")
         assertEquals(request.linkIdentifier, "1234")
 
-        RAdAttribution.linkResolver.resolve(
+        RakutenAdvertisingAttribution.linkResolver.resolve(
                 uri,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -89,7 +89,7 @@ class RAdAttributionTest {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
         val link = "https://rakutenadvertising.app.link/SVOVLqKrR5?%243p=a_rakuten_marketing"
 
-        val request = RAdAttribution.linkResolver.createRequest(
+        val request = RakutenAdvertisingAttribution.linkResolver.createRequest(
                 link,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -98,7 +98,7 @@ class RAdAttributionTest {
         assertEquals(request.appLinkUrl, link)
         assertEquals(request.linkIdentifier, "")
 
-        RAdAttribution.linkResolver.resolve(
+        RakutenAdvertisingAttribution.linkResolver.resolve(
                 link,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -113,7 +113,7 @@ class RAdAttributionTest {
     fun resolveLinkFail() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
 
-        RAdAttribution.linkResolver.resolve(
+        RakutenAdvertisingAttribution.linkResolver.resolve(
                 "",
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(context)
@@ -131,7 +131,7 @@ class RAdAttributionTest {
     fun sendEvent() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
 
-        RAdAttribution.eventSender.sendEvent(
+        RakutenAdvertisingAttribution.eventSender.sendEvent(
                 name = "ADD_TO_CART",
                 eventData = null,
                 userData = UserData.create(appId, appVersion),
@@ -161,7 +161,7 @@ class RAdAttributionTest {
                 quantity = 2
         )
 
-        val request = RAdAttribution.eventSender.createRequest(
+        val request = RakutenAdvertisingAttribution.eventSender.createRequest(
                 name = "ADD_TO_CART",
                 eventData = null,
                 userData = UserData.create(appId, appVersion),
@@ -183,7 +183,7 @@ class RAdAttributionTest {
         assertEquals(request.customData["key_1"], "value_1")
         assertEquals(request.customData["key_3"], "value_3")
 
-        RAdAttribution.eventSender.sendEvent(
+        RakutenAdvertisingAttribution.eventSender.sendEvent(
                 name = "ADD_TO_CART",
                 eventData = null,
                 userData = UserData.create(appId, appVersion),
@@ -213,7 +213,7 @@ class RAdAttributionTest {
                 affiliation = "test_affiliation",
                 description = "test_description"
         )
-        RAdAttribution.eventSender.sendEvent(
+        RakutenAdvertisingAttribution.eventSender.sendEvent(
                 name = "ADD_TO_CART",
                 eventData = eventData,
                 userData = UserData.create(appId, appVersion),

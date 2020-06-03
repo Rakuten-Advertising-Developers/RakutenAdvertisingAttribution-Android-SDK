@@ -9,8 +9,8 @@ apply plugin: 'org.jetbrains.dokka-android'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = 'io.github.rakuten-advertising-developers'
-version = "0.0.3"
+group = 'io.rakutenadvertising'
+version = "0.0.1"
 
 android {
     compileSdkVersion 29
@@ -71,10 +71,10 @@ uploadArchives {
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
             pom.project {
-                name "Attribution SDK"
+                name "Rakuten Advertising Attribution SDK"
                 packaging 'aar'
-                description 'attribution sdk artifact'
-                artifactId "attribution-sdk"
+                description 'attribution sdk artifacts'
+                artifactId "attribution"
                 url 'https://github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android'
                 scm {
                     url 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'

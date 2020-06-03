@@ -12,8 +12,8 @@ import kotlinx.coroutines.Dispatchers
 An object that encapsulates various features of RAdAttribution SDK,
 like sending events and links resolving
  */
-object RAdAttribution {
-    private val TAG = RAdAttribution::class.java.simpleName
+object RakutenAdvertisingAttribution {
+    private val TAG = RakutenAdvertisingAttribution::class.java.simpleName
     private const val ERROR = "You should call RAdAttribution.setup() before"
 
     private lateinit var context: Context
@@ -37,15 +37,15 @@ object RAdAttribution {
         this.configuration = configuration
 
         tokenProvider = JwtProvider(
-            RAdAttribution.configuration.appId,
-            RAdAttribution.configuration.privateKey,
+            RakutenAdvertisingAttribution.configuration.appId,
+            RakutenAdvertisingAttribution.configuration.privateKey,
             tokenStorage
         )
         sessionStorage = SessionStorage()
-        firstLaunchDetector = FirstLaunchDetector(RAdAttribution.context)
+        firstLaunchDetector = FirstLaunchDetector(RakutenAdvertisingAttribution.context)
 
-        deviceData = DeviceData.create(RAdAttribution.context)
-        userData = UserData.create(RAdAttribution.configuration.appId, configuration.appVersion)
+        deviceData = DeviceData.create(RakutenAdvertisingAttribution.context)
+        userData = UserData.create(RakutenAdvertisingAttribution.configuration.appId, configuration.appVersion)
 
         //* instance of EventSender class with the ability to send events
         eventSenderInternal = EventSender(

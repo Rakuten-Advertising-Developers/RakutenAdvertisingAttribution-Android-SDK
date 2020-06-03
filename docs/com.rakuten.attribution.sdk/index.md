@@ -14,9 +14,9 @@ Contains all classes visible for users.
 | [EventData](-event-data/index.md) | `data class EventData`<br>A class that represents details of event data |
 | [EventSender](-event-sender/index.md) | `class EventSender`<br>A class that can send various events via SDK |
 | [LinkResolver](-link-resolver/index.md) | `class LinkResolver`<br>A class that can resolve links via SDK |
-| [RAdAttribution](-r-ad-attribution/index.md) | `object RAdAttribution`<br>An object that encapsulates various features of RAdAttribution SDK, like sending events and links resolving |
 | [RAdDeepLinkData](-r-ad-deep-link-data/index.md) | `data class RAdDeepLinkData`<br>A class that represents response on link resolving operation |
 | [RAdSendEventData](-r-ad-send-event-data/index.md) | `data class RAdSendEventData`<br>A class that represents response on link event sending operation |
+| [RakutenAdvertisingAttribution](-rakuten-advertising-attribution/index.md) | `object RakutenAdvertisingAttribution`<br>An object that encapsulates various features of RAdAttribution SDK, like sending events and links resolving |
 | [Result](-result/index.md) | `sealed class Result<out T>`<br>Container to return result of asynchronous methods |
 | [UserData](-user-data/index.md) | `data class UserData`<br>A class that represents user specific data |
 
