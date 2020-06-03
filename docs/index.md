@@ -235,7 +235,7 @@ We provide a sample app that demonstrate the use of the Rakuten Advertising attr
 
 #### Documentation
 
-* [API References](https://rakuten-advertising-developers.github.io/RADAttribution-SDK-Android/)
+* [API References](https://rakuten-advertising-developers.github.io/RakutenAdvertisingAttribution-Android-SDK/)
 
 ### Packages
 
