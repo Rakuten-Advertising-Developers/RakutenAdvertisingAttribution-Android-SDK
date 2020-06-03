@@ -1,2 +1,2 @@
-rootProject.name='RADAttribution-SDK-Android'
+rootProject.name='RakutenAdvertisingAttribution-Android-SDK'
 include ':radattribution-sdk-android'

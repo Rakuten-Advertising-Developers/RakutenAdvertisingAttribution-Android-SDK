@@ -75,11 +75,11 @@ uploadArchives {
                 packaging 'aar'
                 description 'attribution sdk artifacts'
                 artifactId "attribution"
-                url 'https://github.com/Rakuten-Advertising-Developers/RADAttribution-SDK-Android'
+                url 'https://github.com/Rakuten-Advertising-Developers/RakutenAdvertisingAttribution-Android-SDK.git'
                 scm {
-                    url 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
-                    connection 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
-                    developerConnection 'git@github.com:Rakuten-Advertising-Developers/RADAttribution-SDK-Android.git'
+                    url 'git@github.com:Rakuten-Advertising-Developers/RakutenAdvertisingAttribution-Android-SDK.git'
+                    connection 'git@github.com:Rakuten-Advertising-Developers/RakutenAdvertisingAttribution-Android-SDK.git'
+                    developerConnection 'git@github.com:Rakuten-Advertising-Developers/RakutenAdvertisingAttribution-Android-SDK.git'
                 }
                 licenses {
                     license {
