@@ -25,7 +25,7 @@ To use RakutenAdvertisingAttribution SDK you need to add this string to 'depende
 ```groovy
 dependencies {
     //...
-    implementation 'com.rakuten.advertising:attribution-sdk:0.0.2'
+    implementation 'io.github.rakuten-advertising-developers:attribution-sdk:0.0.3'
 }
 ```
 and also you need to add mavenCentral to repositories list on you root build.gradle file 
