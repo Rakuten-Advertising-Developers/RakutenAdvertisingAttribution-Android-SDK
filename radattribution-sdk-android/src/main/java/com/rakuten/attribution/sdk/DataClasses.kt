@@ -3,7 +3,6 @@ package com.rakuten.attribution.sdk
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
-import android.provider.Settings
 import com.squareup.moshi.Json
 
 /**
@@ -25,11 +24,7 @@ data class DeviceData(
          * @param context Android's Context instance
          * @return
          */
-        fun create(context: Context): DeviceData {
-            val deviceId = Settings.Secure.getString(//todo: discuss
-                context.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+        fun create(deviceId: String): DeviceData {
             return DeviceData(
                 os = "Android",
                 osVersion = Build.VERSION.RELEASE,
@@ -63,19 +58,19 @@ data class EventData(
  * A class that represents purchased item info
  */
 data class ContentItem(
-        @Json(name = "\$sku") val sku: String?,
-        @Json(name = "\$price") val price: Double?,
-        @Json(name = "\$product_name") val productName: String?,
-        @Json (name = "\$quantity") val quantity:Int?
+    @Json(name = "\$sku") val sku: String?,
+    @Json(name = "\$price") val price: Double?,
+    @Json(name = "\$product_name") val productName: String?,
+    @Json(name = "\$quantity") val quantity: Int?
 )
 
 /**
  * A class that represents user specific data
  */
 data class UserData(
-        @Json(name = "bundle_identifier") val applicationId: String,
-        @Json(name = "app_version") val applicationVersion: String,
-        @Json(name = "sdk_version") val sdkVersion: String
+    @Json(name = "bundle_identifier") val applicationId: String,
+    @Json(name = "app_version") val applicationVersion: String,
+    @Json(name = "sdk_version") val sdkVersion: String
 ) {
     companion object {
         fun create(appId: String, appVersion: String): UserData {

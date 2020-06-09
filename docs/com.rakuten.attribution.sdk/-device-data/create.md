@@ -2,7 +2,7 @@
 
 # create
 
-`fun create(context: `[`Context`](https://developer.android.com/reference/android/content/Context.html)`): `[`DeviceData`](index.md)
+`fun create(deviceId: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`DeviceData`](index.md)
 
 Creates DeviceData class from Android's Context instance
 

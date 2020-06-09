@@ -4,10 +4,8 @@
 
 `val endpointUrl: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
-url which sdk will send analytics to,
-otherwise `true`
+url which sdk will send analytics to
 
 ### Property
 
-`endpointUrl` - url which sdk will send analytics to,
-otherwise `true`
+`endpointUrl` - url which sdk will send analytics to

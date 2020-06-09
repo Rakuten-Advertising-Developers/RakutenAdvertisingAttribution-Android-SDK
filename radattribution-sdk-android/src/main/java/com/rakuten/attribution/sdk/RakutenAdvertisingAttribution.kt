@@ -44,8 +44,14 @@ object RakutenAdvertisingAttribution {
         sessionStorage = SessionStorage()
         firstLaunchDetector = FirstLaunchDetector(RakutenAdvertisingAttribution.context)
 
-        deviceData = DeviceData.create(RakutenAdvertisingAttribution.context)
-        userData = UserData.create(RakutenAdvertisingAttribution.configuration.appId, configuration.appVersion)
+        deviceData = DeviceData.create(
+            configuration.deviceId
+        )
+
+        userData = UserData.create(
+            RakutenAdvertisingAttribution.configuration.appId,
+            configuration.appVersion
+        )
 
         //* instance of EventSender class with the ability to send events
         eventSenderInternal = EventSender(

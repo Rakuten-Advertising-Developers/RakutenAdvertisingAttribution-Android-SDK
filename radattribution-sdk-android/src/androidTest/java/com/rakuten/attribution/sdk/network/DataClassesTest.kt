@@ -1,20 +1,19 @@
 package com.rakuten.attribution.sdk.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.rakuten.attribution.sdk.DeviceData
 import com.rakuten.attribution.sdk.UserData
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class DataClassesTest {
     @Test
     fun createDeviceData() {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val deviceData = DeviceData.create(context)
+        val deviceData = DeviceData.create(UUID.randomUUID().toString())
 
         assertNotNull(deviceData)
         assertNotNull(deviceData.os)

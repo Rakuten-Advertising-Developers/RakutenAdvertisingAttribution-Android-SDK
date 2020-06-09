@@ -4,8 +4,8 @@
 
 `val isManualAppLaunch: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
 
-if application opened from link with the associated domain - `false`,
+if application opened from link with the associated domain - `false`, otherwise `true`
 
 ### Property
 
-`isManualAppLaunch` - if application opened from link with the associated domain - `false`,
+`isManualAppLaunch` - if application opened from link with the associated domain - `false`, otherwise `true`

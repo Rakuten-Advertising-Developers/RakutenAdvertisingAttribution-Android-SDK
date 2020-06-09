@@ -49,14 +49,15 @@ It's constructor takes three parameters:
  - privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
  - isManualAppLaunch (flag that indicates if application was opened from link with the associated domain)
  - endpointUrl (url which sdk will send analytics to)
+ - deviceId (optional parameter, unique device identifier, please read to get more information https://developer.android.com/training/articles/user-data-ids)
 ```kotlin
  val configuration = Configuration(
                 appId = BuildConfig.APPLICATION_ID,
                 appVersion = BuildConfig.VERSION_NAME,
                 privateKey = secretKey,
                 isManualAppLaunch = false,
-                endpointUrl = ENDPOINT_URL
-
+                endpointUrl = ENDPOINT_URL,
+                deviceId = "12345"
         )
 ```
 

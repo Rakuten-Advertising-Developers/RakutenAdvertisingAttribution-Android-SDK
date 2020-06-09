@@ -28,4 +28,4 @@ A class that represents info about user's device
 
 | Name | Summary |
 |---|---|
-| [create](create.md) | `fun create(context: `[`Context`](https://developer.android.com/reference/android/content/Context.html)`): `[`DeviceData`](./index.md)<br>Creates DeviceData class from Android's Context instance |
+| [create](create.md) | `fun create(deviceId: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`DeviceData`](./index.md)<br>Creates DeviceData class from Android's Context instance |
