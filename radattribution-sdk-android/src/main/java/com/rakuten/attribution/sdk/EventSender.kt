@@ -1,7 +1,6 @@
 package com.rakuten.attribution.sdk
 
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.network.*
 import kotlinx.coroutines.CoroutineScope
@@ -49,8 +48,7 @@ class EventSender internal constructor(
         )
     }
 
-    @VisibleForTesting
-    fun sendEvent(
+    internal fun sendEvent(
         name: String,
         eventData: EventData? = null,
         userData: UserData,
@@ -87,7 +85,6 @@ class EventSender internal constructor(
         }
     }
 
-    @VisibleForTesting
     internal fun createRequest(
         name: String,
         userData: UserData,

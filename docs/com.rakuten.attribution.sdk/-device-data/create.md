@@ -8,7 +8,7 @@ Creates DeviceData class from Android's Context instance
 
 ### Parameters
 
-`context` - Android's Context instance
+`deviceId` - unique device identifier
 
 **Return**
 

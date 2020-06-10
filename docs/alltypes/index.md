@@ -9,7 +9,6 @@
 | [com.rakuten.attribution.sdk.Configuration](../com.rakuten.attribution.sdk/-configuration/index.md) | A type that provides an ability to configure SDK |
 | [com.rakuten.attribution.sdk.ContentItem](../com.rakuten.attribution.sdk/-content-item/index.md) | A class that represents purchased item info |
 | [com.rakuten.attribution.sdk.CustomData](../com.rakuten.attribution.sdk/-custom-data.md) | A dictionary to put custom data associated with event |
-| [com.rakuten.attribution.sdk.DeviceData](../com.rakuten.attribution.sdk/-device-data/index.md) | A class that represents info about user's device |
 | [com.rakuten.attribution.sdk.EventData](../com.rakuten.attribution.sdk/-event-data/index.md) | A class that represents details of event data |
 | [com.rakuten.attribution.sdk.EventSender](../com.rakuten.attribution.sdk/-event-sender/index.md) | A class that can send various events via SDK |
 | [com.rakuten.attribution.sdk.LinkResolver](../com.rakuten.attribution.sdk/-link-resolver/index.md) | A class that can resolve links via SDK |

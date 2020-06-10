@@ -10,7 +10,6 @@ Contains all classes visible for users.
 |---|---|
 | [Configuration](-configuration/index.md) | `data class Configuration`<br>A type that provides an ability to configure SDK |
 | [ContentItem](-content-item/index.md) | `data class ContentItem`<br>A class that represents purchased item info |
-| [DeviceData](-device-data/index.md) | `data class DeviceData`<br>A class that represents info about user's device |
 | [EventData](-event-data/index.md) | `data class EventData`<br>A class that represents details of event data |
 | [EventSender](-event-sender/index.md) | `class EventSender`<br>A class that can send various events via SDK |
 | [LinkResolver](-link-resolver/index.md) | `class LinkResolver`<br>A class that can resolve links via SDK |

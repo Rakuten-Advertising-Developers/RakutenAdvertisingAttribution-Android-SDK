@@ -2,7 +2,6 @@ package com.rakuten.attribution.sdk
 
 import android.net.Uri
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import com.rakuten.attribution.sdk.jwt.JwtProvider
 import com.rakuten.attribution.sdk.network.RAdApi
 import com.rakuten.attribution.sdk.network.ResolveLinkRequest
@@ -14,12 +13,12 @@ import kotlinx.coroutines.launch
  * A class that can resolve links via SDK
  */
 class LinkResolver internal constructor(
-    private val userData: UserData,
-    private val deviceData: DeviceData,
-    private val tokenProvider: JwtProvider,
-    private val firstLaunchDetector: FirstLaunchDetector,
-    private val sessionStorage: SessionStorage,
-    private val scope: CoroutineScope
+        private val userData: UserData,
+        private val deviceData: DeviceData,
+        private val tokenProvider: JwtProvider,
+        private val firstLaunchDetector: FirstLaunchDetector,
+        private val sessionStorage: SessionStorage,
+        private val scope: CoroutineScope
 ) {
     companion object {
         val tag = LinkResolver::class.java.simpleName
@@ -29,12 +28,11 @@ class LinkResolver internal constructor(
         resolve(link, userData, deviceData, callback)
     }
 
-    @VisibleForTesting
-    fun resolve(
-        link: String,
-        userData: UserData,
-        deviceData: DeviceData,
-        callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
+    internal fun resolve(
+            link: String,
+            userData: UserData,
+            deviceData: DeviceData,
+            callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
         val request = createRequest(link, userData, deviceData)
@@ -60,26 +58,25 @@ class LinkResolver internal constructor(
         }
     }
 
-    @VisibleForTesting
     internal fun createRequest(
-        link: String,
-        userData: UserData,
-        deviceData: DeviceData
+            link: String,
+            userData: UserData,
+            deviceData: DeviceData
     ): ResolveLinkRequest {
         val uri = Uri.parse(link)
 
         return when (uri.scheme) {
             "http", "https" -> ResolveLinkRequest(
-                firstSession = firstLaunchDetector.isFirstLaunch,
-                appLinkUrl = link,
-                userData = userData,
-                deviceData = deviceData
+                    firstSession = firstLaunchDetector.isFirstLaunch,
+                    appLinkUrl = link,
+                    userData = userData,
+                    deviceData = deviceData
             )
             else -> ResolveLinkRequest(
-                firstSession = firstLaunchDetector.isFirstLaunch,
-                linkIdentifier = uri.getQueryParameter("link_click_id") ?: "",
-                userData = userData,
-                deviceData = deviceData
+                    firstSession = firstLaunchDetector.isFirstLaunch,
+                    linkIdentifier = uri.getQueryParameter("link_click_id") ?: "",
+                    userData = userData,
+                    deviceData = deviceData
             )
         }
     }

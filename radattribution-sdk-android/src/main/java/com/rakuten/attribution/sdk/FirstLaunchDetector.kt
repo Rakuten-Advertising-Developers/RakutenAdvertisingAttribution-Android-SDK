@@ -2,7 +2,6 @@ package com.rakuten.attribution.sdk
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import androidx.annotation.VisibleForTesting
 
 internal class FirstLaunchDetector(context: Context) {
     companion object {
@@ -19,7 +18,6 @@ internal class FirstLaunchDetector(context: Context) {
             return firstLaunch
         }
 
-    @VisibleForTesting
     fun clear() {
         sharedPreferences.edit().clear().apply()
     }

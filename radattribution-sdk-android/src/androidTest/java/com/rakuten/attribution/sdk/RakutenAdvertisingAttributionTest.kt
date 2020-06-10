@@ -37,7 +37,7 @@ class RakutenAdvertisingAttributionTest {
             privateKey = secretKey,
             isManualAppLaunch = false,
             endpointUrl = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/",
-            deviceId = "12345"
+            deviceId = deviceId
         )
         RakutenAdvertisingAttribution.setup(context, configuration)
     }
