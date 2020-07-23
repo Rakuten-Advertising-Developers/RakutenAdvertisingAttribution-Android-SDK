@@ -30,7 +30,7 @@ class EventSender internal constructor(
      * @param contentItems content items associated with event
      * @param callback lambda to be called with operation result
      */
-    fun sendEvent(
+    internal fun sendEvent(
         name: String,
         eventData: EventData? = null,
         customData: CustomData = emptyMap(),

@@ -35,14 +35,16 @@ private val httpClient: OkHttpClient = OkHttpClient.Builder().apply {
 }.build()
 
 internal interface RAdAPIService {
-    @POST("resolve-link")
+//    @POST("resolve-link")
+    @POST("resolve-link-rak")
     @Headers("Content-Type:application/json")
     fun resolveLinkAsync(
         @Body request: ResolveLinkRequest,
         @Header("Authorization") token: String
     ): Deferred<RAdDeepLinkData>
 
-    @POST("send-event")
+//    @POST("send-event")
+    @POST("send-event-rak")
     @Headers("Content-Type:application/json")
     fun sendEventAsync(
         @Body request: SendEventRequest,

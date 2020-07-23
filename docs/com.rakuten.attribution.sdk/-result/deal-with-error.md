@@ -2,7 +2,7 @@
 
 # dealWithError
 
-`inline fun dealWithError(onError: (`[`Error`](-error/index.md)`) -> `[`Nothing`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html)`): `[`T`](index.md#T)
+`inline fun dealWithError(onError: (`[`Result.Error`](-error/index.md)`) -> `[`Nothing`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html)`): `[`T`](index.md#T)
 
 util method to handle errors
 

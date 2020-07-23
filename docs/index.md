@@ -87,7 +87,7 @@ To send event to server you have to call sendEvent() method of EventSender sdk c
 The only required parameter of this method is 'name'
 
 ``` kotlin
-RakutenAdvertisingAttribution.eventSender.sendEvent(name = "PURCHASE")
+RakutenAdvertisingAttribution.sendEvent(name = "PURCHASE")
 ```
 
 Optionally you can pass an instance of [EventData](com.rakuten.attribution.sdk/-event-data/index.md) class, with event's metadata.
@@ -133,7 +133,7 @@ Optionally you can pass lambda to be called on operation result.
 So your sendEvent() call might look like this
 
 ``` kotlin
-  RakutenAdvertisingAttribution.eventSender.sendEvent(
+  RakutenAdvertisingAttribution.sendEvent(
                 name = action,
                 customData = customData,
                 eventData = eventData,
@@ -217,7 +217,7 @@ And optional lambda callback.
 
 ``` kotlin
 private fun resolveLink(link: String) {
-        RakutenAdvertisingAttribution.linkResolver.resolve(link) {
+        RakutenAdvertisingAttribution.resolve(link) {
             when (it) {
                 is Result.Success -> {
                 }
@@ -243,6 +243,7 @@ We provide a sample app that demonstrate the use of the Rakuten Advertising attr
 | Name | Summary |
 |---|---|
 | [com.rakuten.attribution.sdk](com.rakuten.attribution.sdk/index.md) | Contains all classes visible for users. |
+| [com.rakuten.attribution.sdk.network](com.rakuten.attribution.sdk.network/index.md) |  |
 
 ### Index
 

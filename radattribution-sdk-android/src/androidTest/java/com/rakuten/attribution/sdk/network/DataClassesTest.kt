@@ -23,7 +23,7 @@ class DataClassesTest {
         assertTrue(deviceData.screenWidth > 0)
         assertTrue(deviceData.screenHeight > 0)
 
-        assertNotNull(deviceData.deviceId)
+        assertNotNull(deviceData.hardwareId)
         assertNotNull(deviceData.isSimulator)
     }
 

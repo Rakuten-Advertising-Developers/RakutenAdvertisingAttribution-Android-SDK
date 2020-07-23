@@ -9,5 +9,5 @@ data class RAdDeepLinkData internal constructor(
     @Json(name = "session_id") val sessionId: String,
     @Json(name = "device_fingerprint_id") val deviceFingerprintId: String,
     var link: String = "",
-    var data: Map<String, Any>
+    var data: Map<String, Any>?
 )

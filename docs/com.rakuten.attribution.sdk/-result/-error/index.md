@@ -20,4 +20,4 @@
 
 | Name | Summary |
 |---|---|
-| [dealWithError](../deal-with-error.md) | `fun dealWithError(onError: (`[`Error`](./index.md)`) -> `[`Nothing`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html)`): `[`T`](../index.md#T)<br>util method to handle errors |
+| [dealWithError](../deal-with-error.md) | `fun dealWithError(onError: (`[`Result.Error`](./index.md)`) -> `[`Nothing`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html)`): `[`T`](../index.md#T)<br>util method to handle errors |

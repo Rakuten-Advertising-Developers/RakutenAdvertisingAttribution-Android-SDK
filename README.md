@@ -73,7 +73,7 @@ Radattribution SDK provides a way to send events.
 To send event to server you have to call sendEvent() method of EventSender sdk class. 
 The only required parameter of this method is 'name'
 ```kotlin
-RakutenAdvertisingAttribution.eventSender.sendEvent(name = "PURCHASE")
+RakutenAdvertisingAttribution.sendEvent(name = "PURCHASE")
 ```
 
 Optionally you can pass an instance of [EventData][com.rakuten.attribution.sdk.EventData] class, with event's metadata. 
@@ -115,7 +115,7 @@ Optionally you can pass lambda to be called on operation result.
 
 So your sendEvent() call might look like this 
 ```kotlin
-  RakutenAdvertisingAttribution.eventSender.sendEvent(
+  RakutenAdvertisingAttribution.sendEvent(
                 name = action,
                 customData = customData,
                 eventData = eventData,
@@ -191,7 +191,7 @@ If it so we can resolve deep link with resolveLink() method. There is only one r
 And optional lambda callback. 
 ```kotlin
 private fun resolveLink(link: String) {
-        RakutenAdvertisingAttribution.linkResolver.resolve(link) {
+        RakutenAdvertisingAttribution.resolve(link) {
             when (it) {
                 is Result.Success -> {
                 }

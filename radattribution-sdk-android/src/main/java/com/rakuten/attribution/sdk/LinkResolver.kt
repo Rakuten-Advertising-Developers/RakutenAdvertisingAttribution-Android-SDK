@@ -30,8 +30,8 @@ class LinkResolver internal constructor(
 
     internal fun resolve(
             link: String,
-            userData: UserData,
-            deviceData: DeviceData,
+            userData: UserData = this.userData,
+            deviceData: DeviceData = this.deviceData,
             callback: ((Result<RAdDeepLinkData>) -> Unit)? = null
     ) {
         val token = tokenProvider.obtainToken()
