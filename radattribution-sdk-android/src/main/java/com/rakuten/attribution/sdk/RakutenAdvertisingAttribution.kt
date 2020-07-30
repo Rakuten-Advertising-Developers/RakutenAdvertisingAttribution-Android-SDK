@@ -115,6 +115,9 @@ object RakutenAdvertisingAttribution {
     private fun sendAppLaunchedEventIfNeeded() {
         if (configuration.isManualAppLaunch) {
             Log.i(TAG, "send app launched event")
+            Log.i(TAG, "send app launched event")
+            Log.i(TAG, "send app launched event")
+            Log.v(TAG, "send app launched event")
             linkResolverInternal.resolve(link = "")
         }
     }
