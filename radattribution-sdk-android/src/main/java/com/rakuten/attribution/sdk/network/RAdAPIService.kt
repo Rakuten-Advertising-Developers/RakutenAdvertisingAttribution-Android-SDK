@@ -1,6 +1,7 @@
 package com.rakuten.attribution.sdk.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.rakuten.attribution.sdk.CustomDateAdapter
 import com.rakuten.attribution.sdk.RAdDeepLinkData
 import com.rakuten.attribution.sdk.RAdSendEventData
 import com.squareup.moshi.Moshi
@@ -15,6 +16,7 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import java.util.*
 
 //private const val BASE_URL = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/"
 
@@ -24,6 +26,7 @@ import retrofit2.http.POST
  */
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
+    .add(Date::class.javaObjectType,  CustomDateAdapter())
     .build()
 
 private val logging = HttpLoggingInterceptor().apply {

@@ -1,6 +1,7 @@
 package com.rakuten.attribution.sdk
 
 import android.content.Context
+import android.os.Looper
 import android.provider.Settings.Secure.ANDROID_ID
 import android.util.Log
 import com.rakuten.attribution.sdk.jwt.JwtProvider
@@ -46,7 +47,7 @@ object RakutenAdvertisingAttribution {
         context: Context,
         configuration: Configuration
     ) {
-        Log.i(TAG, "setup()")
+        checkThread()
 
         this.context = context
         this.configuration = configuration
@@ -56,6 +57,7 @@ object RakutenAdvertisingAttribution {
             RakutenAdvertisingAttribution.configuration.privateKey,
             tokenStorage
         )
+
         sessionStorage = SessionStorage()
         firstLaunchDetector = FirstLaunchDetector(RakutenAdvertisingAttribution.context)
 
@@ -68,7 +70,6 @@ object RakutenAdvertisingAttribution {
         validateToken()
 
         deviceData = obtainDeviceDataAsync()
-
         eventSenderInternal = coroutineScope.async {
             EventSender(
                 userData = userData,
@@ -80,7 +81,7 @@ object RakutenAdvertisingAttribution {
         }
 
         linkResolverInternal = coroutineScope.async {
-            LinkResolver(
+            return@async LinkResolver(
                 userData = userData,
                 deviceData = deviceData.await(),
                 tokenProvider = tokenProvider,
@@ -107,6 +108,7 @@ object RakutenAdvertisingAttribution {
         contentItems: Array<ContentItem> = emptyArray(),
         callback: ((Result<RAdSendEventData>) -> Unit)? = null
     ) {
+        checkThread()
         coroutineScope.launch {
             eventSenderInternal.await()
                 .sendEvent(name, eventData, customData, contentItems, callback)
@@ -114,7 +116,9 @@ object RakutenAdvertisingAttribution {
     }
 
     fun resolve(link: String, callback: ((Result<RAdDeepLinkData>) -> Unit)? = null) {
+        checkThread()
         coroutineScope.launch {
+            Log.v(TAG, "going to crash")
             linkResolverInternal.await()
                 .resolve(link, callback)
         }
@@ -126,6 +130,7 @@ object RakutenAdvertisingAttribution {
 
     private fun obtainDeviceDataAsync(): Deferred<DeviceData> {
         return coroutineScope.async {
+            delay(1_000)
             val fingerPrint = GlobalScope.async {
                 FingerprintFetcher(context).fetch()
             }
@@ -138,6 +143,14 @@ object RakutenAdvertisingAttribution {
                 fingerPrint = fingerPrint.await(),
                 googleAdvertisingId = androidAdId.await()
             )
+        }
+    }
+
+    private fun checkThread() {
+        Log.v(TAG, "checkThread()")
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            Log.v(TAG, "throw IllegalStateException()")
+            throw IllegalStateException("Method should be called from main thread")
         }
     }
 }

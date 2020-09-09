@@ -3,8 +3,8 @@ package com.rakuten.attribution.sdk
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.runBlocking
+import com.rakuten.attribution.sdk.network.FingerprintFetcher
+import kotlinx.coroutines.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -17,6 +17,7 @@ class RakutenAdvertisingAttributionTest {
     private lateinit var context: Context
     private lateinit var appId: String
     private lateinit var appVersion: String
+    private lateinit var fingerPrint: String
 
     private val deviceId = UUID.randomUUID().toString()
 
@@ -38,7 +39,13 @@ class RakutenAdvertisingAttributionTest {
             endpointUrl = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/",
             deviceId = deviceId
         )
-        RakutenAdvertisingAttribution.setup(context, configuration)
+        runBlocking {
+
+            fingerPrint = FingerprintFetcher(context).fetch()
+            withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
+                RakutenAdvertisingAttribution.setup(context, configuration)
+            }
+        }
     }
 
     @Test
@@ -51,10 +58,11 @@ class RakutenAdvertisingAttributionTest {
     fun resolveEmptyLink() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
 
+
         RakutenAdvertisingAttribution.linkResolverInternal.await().resolve(
             "",
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
+            deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint)
         ) {
             deferredResult.complete(it)
         }
@@ -79,8 +87,14 @@ class RakutenAdvertisingAttributionTest {
 
         RakutenAdvertisingAttribution.linkResolverInternal.await().resolve(
             uri,
-            userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
+            userData = UserData.create(
+                appId = appId,
+                appVersion = appVersion
+            ),
+            deviceData = DeviceData.create(
+                deviceId = deviceId,
+                fingerPrint = fingerPrint
+            )
         ) {
             deferredResult.complete(it)
         }
@@ -106,7 +120,7 @@ class RakutenAdvertisingAttributionTest {
         RakutenAdvertisingAttribution.linkResolverInternal.await().resolve(
             link,
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
+            deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint)
         ) {
             deferredResult.complete(it)
         }
