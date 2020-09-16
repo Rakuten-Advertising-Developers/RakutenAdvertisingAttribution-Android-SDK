@@ -5,13 +5,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.rakuten.attribution.sdk.network.FingerprintFetcher
 import kotlinx.coroutines.*
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import org.junit.runners.MethodSorters
 
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4::class)
 class RakutenAdvertisingAttributionTest {
     private lateinit var context: Context
@@ -19,7 +21,7 @@ class RakutenAdvertisingAttributionTest {
     private lateinit var appVersion: String
     private lateinit var fingerPrint: String
 
-    private val deviceId = UUID.randomUUID().toString()
+    private val deviceId = "368ab401-94ac-429c-956a-b2db0bfea9b3"
 
     @Before
     fun setUp() {
@@ -36,7 +38,7 @@ class RakutenAdvertisingAttributionTest {
             appId = context.packageName,
             appVersion = appVersion,
             privateKey = secretKey,
-            endpointUrl = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/",
+            endpointUrl = "https://api.rakutenadvertising.io/v2/",
             deviceId = deviceId
         )
         runBlocking {
@@ -77,7 +79,7 @@ class RakutenAdvertisingAttributionTest {
 
         val request =
             RakutenAdvertisingAttribution.linkResolverInternal.await().createRequest(
-                uri,
+                link = uri,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(deviceId)
             )
@@ -100,16 +102,20 @@ class RakutenAdvertisingAttributionTest {
         }
         val result = deferredResult.await()
         assertTrue(result is Result.Success)
+
+        val linkData = (result as Result.Success).data
+        assertNotNull(linkData.clickTimestamp)
     }
 
     @Test
-    fun resolveAppLink() = runBlocking {
+    fun resolveZAppLink() = runBlocking {
         val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
-        val link = "https://rakutenadvertising.app.link/SVOVLqKrR5?%243p=a_rakuten_marketing"
+        val link =
+            "https://click.rakutenadvertising.io/dl/44066?$3p=a_custom_781200801305432596&id=lMh2Xiq9xN0&offerid=12345&type=3&subid=0&mid=44066&u1=ram"
 
         val request =
             RakutenAdvertisingAttribution.linkResolverInternal.await().createRequest(
-                link,
+                link = link,
                 userData = UserData.create(appId, appVersion),
                 deviceData = DeviceData.create(deviceId)
             )
@@ -126,24 +132,9 @@ class RakutenAdvertisingAttributionTest {
         }
         val result = deferredResult.await()
         assertTrue(result is Result.Success)
-    }
 
-    @Test
-    fun resolveLinkFail() = runBlocking {
-        val deferredResult: CompletableDeferred<Result<RAdDeepLinkData>?> = CompletableDeferred()
-
-        RakutenAdvertisingAttribution.linkResolverInternal.await().resolve(
-            "",
-            userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
-                .copy(
-                    os = "iOS"//set wrong iOS name to cause an error
-                )
-        ) {
-            deferredResult.complete(it)
-        }
-        val result = deferredResult.await()
-        assertTrue(result is Result.Error)
+        val linkData = (result as Result.Success).data
+        assertNotNull(linkData.clickTimestamp)
     }
 
     @Test
@@ -154,7 +145,7 @@ class RakutenAdvertisingAttributionTest {
             name = "ADD_TO_CART",
             eventData = null,
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
+            deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint)
         ) {
             deferredResult.complete(it)
         }
@@ -162,7 +153,6 @@ class RakutenAdvertisingAttributionTest {
         val result = deferredResult.await()
         assertTrue(result is Result.Success)
     }
-
 
     @Test
     fun sendEventWithCustomData() = runBlocking {
@@ -185,7 +175,7 @@ class RakutenAdvertisingAttributionTest {
             name = "ADD_TO_CART",
             eventData = null,
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId),
+            deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint),
             customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
             contentItems = arrayOf(item1, item2)
         )
@@ -207,7 +197,7 @@ class RakutenAdvertisingAttributionTest {
             name = "ADD_TO_CART",
             eventData = null,
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId),
+            deviceData = DeviceData.create(deviceId, fingerPrint = fingerPrint),
             customData = mapOf("key_1" to "value_1", "key_2" to "value_2", "key_3" to "value_3"),
             contentItems = arrayOf(item1, item2)
         ) {
@@ -231,14 +221,16 @@ class RakutenAdvertisingAttributionTest {
             tax = 0.7,
             coupon = "test_coupon",
             affiliation = "test_affiliation",
-            description = "test_description"
+            description = "test_description",
         )
         RakutenAdvertisingAttribution.eventSenderInternal.await().sendEvent(
             name = "ADD_TO_CART",
             eventData = eventData,
             userData = UserData.create(appId, appVersion),
-            deviceData = DeviceData.create(deviceId)
-                .copy(os = "iOS")
+            deviceData = DeviceData.create(
+                deviceId = deviceId,
+                fingerPrint = fingerPrint
+            )
         ) {
             deferredResult.complete(it)
         }

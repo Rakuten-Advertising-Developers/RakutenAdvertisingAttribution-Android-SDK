@@ -27,7 +27,7 @@ class RakutenAdvertisingAttributionCrashTest {
         appId = context.packageName,
         appVersion = appVersion,
         privateKey = secretKey,
-        endpointUrl = "https://attribution-sdk-endpoint-ff5ckcoswq-uc.a.run.app/v2/",
+        endpointUrl = "https://api.rakutenadvertising.io/v2/",
         deviceId = deviceId)
 
     @Test

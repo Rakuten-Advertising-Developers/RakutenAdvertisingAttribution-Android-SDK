@@ -15,7 +15,7 @@ class FingerprintFetcher(private val context: Context) {
         val TAG = FingerprintFetcher::class.java.simpleName
     }
 
-    private val url: String = "https://dev-attribution-sdk.web.app/fingerprint"
+    private val url: String = "https://click.rakutenadvertising.io/fingerprint"
 
     private lateinit var webView: WebView
 
