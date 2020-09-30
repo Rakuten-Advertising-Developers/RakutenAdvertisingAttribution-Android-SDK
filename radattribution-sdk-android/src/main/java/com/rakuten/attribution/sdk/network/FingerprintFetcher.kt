@@ -15,7 +15,12 @@ class FingerprintFetcher(private val context: Context) {
         val TAG = FingerprintFetcher::class.java.simpleName
     }
 
-    private val url: String = "https://click.rakutenadvertising.io/fingerprint"
+    private val url: String = if (com.rakuten.attribution.sdk.BuildConfig.DEBUG) {
+        "https://click.rakutenadvertising.io/fingerprint"
+    } else {
+        "https://click.staging.rakutenadvertising.io/fingerprint"
+    }
+
 
     private lateinit var webView: WebView
 
