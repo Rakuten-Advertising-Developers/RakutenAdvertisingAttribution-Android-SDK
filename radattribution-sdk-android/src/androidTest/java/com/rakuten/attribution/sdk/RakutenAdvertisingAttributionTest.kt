@@ -42,7 +42,6 @@ class RakutenAdvertisingAttributionTest {
             deviceId = deviceId
         )
         runBlocking {
-
             fingerPrint = FingerprintFetcher(context).fetch()
             withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
                 RakutenAdvertisingAttribution.setup(context, configuration)

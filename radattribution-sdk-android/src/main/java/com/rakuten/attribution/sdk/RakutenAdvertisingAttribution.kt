@@ -118,7 +118,6 @@ object RakutenAdvertisingAttribution {
     fun resolve(link: String, callback: ((Result<RAdDeepLinkData>) -> Unit)? = null) {
         checkThread()
         coroutineScope.launch {
-            Log.v(TAG, "going to crash")
             linkResolverInternal.await()
                 .resolve(link, callback)
         }
