@@ -141,7 +141,7 @@ class RakutenAdvertisingAttributionTest {
         val deferredResult: CompletableDeferred<Result<RAdSendEventData>?> = CompletableDeferred()
 
         RakutenAdvertisingAttribution.eventSenderInternal.await().sendEvent(
-            name = "ADD_TO_CART",
+            name = "PURCHASE",
             eventData = null,
             userData = UserData.create(appId, appVersion),
             deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint)
@@ -171,7 +171,7 @@ class RakutenAdvertisingAttributionTest {
         )
 
         val request = RakutenAdvertisingAttribution.eventSenderInternal.await().createRequest(
-            name = "ADD_TO_CART",
+            name = "PURCHASE",
             eventData = null,
             userData = UserData.create(appId, appVersion),
             deviceData = DeviceData.create(deviceId = deviceId, fingerPrint = fingerPrint),
@@ -193,7 +193,7 @@ class RakutenAdvertisingAttributionTest {
         assertEquals(request.customData["key_3"], "value_3")
 
         RakutenAdvertisingAttribution.eventSenderInternal.await().sendEvent(
-            name = "ADD_TO_CART",
+            name = "PURCHASE",
             eventData = null,
             userData = UserData.create(appId, appVersion),
             deviceData = DeviceData.create(deviceId, fingerPrint = fingerPrint),
@@ -223,7 +223,7 @@ class RakutenAdvertisingAttributionTest {
             description = "test_description",
         )
         RakutenAdvertisingAttribution.eventSenderInternal.await().sendEvent(
-            name = "ADD_TO_CART",
+            name = "PURCHASE",
             eventData = eventData,
             userData = UserData.create(appId, appVersion),
             deviceData = DeviceData.create(
