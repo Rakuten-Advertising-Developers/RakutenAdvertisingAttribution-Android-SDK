@@ -1,11 +1,25 @@
-## RADAttribution Android SDK
+## RakutenAdvertising Attribution Android SDK 
+   Version 0.0.2
 
 Rakuten advertising attribution SDK allows advertisers to track app installs and in-app conversion events using any affiliate link promoted within a publisher’s mobile app or on a mobile web page.
+
+
+## Getting Started with the RakutenAdvertising Attribution SDK
+
+The RakutenAdvertising Attribution SDK enables you to track your app activity, 
+including installs and purchase events. The SDK integrates with deep linking and provides support for event-to-click attribution.  
+
+Important: We recommend reading through the entire SDK documentation before beginning your SDK integration to make sure everything is clear. Your Rakuten technical contact is happy to answer any questions you may have. Engineering support is also available to you as needed.  
 
 ### Requires Android API level 21+
 
 
-### Create public/private key pairs
+## SDK Checklist  
+    - Create public/private key pairs
+    - Add RakutenAdvertisingAttribution SDK to project
+    - Setup RakutenAdvertisingAttribution SDK initialization
+
+#### Create public/private key pairs
 Our SDK internally uses a private key to sign a JSON Web Token(JWT).
 This token is passed to our Attribution backend system to verify the SDK's identity. 
 

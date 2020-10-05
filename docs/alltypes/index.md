@@ -1,6 +1,6 @@
 
 
-## RADAttribution Android SDK
+## RakutenAdvertising Attribution Android SDK
 
 ### All Types
 
