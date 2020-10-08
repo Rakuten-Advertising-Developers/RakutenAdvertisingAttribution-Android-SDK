@@ -220,7 +220,7 @@ class RakutenAdvertisingAttributionTest {
             tax = 0.7,
             coupon = "test_coupon",
             affiliation = "test_affiliation",
-            description = "test_description",
+            description = "test_description"
         )
         RakutenAdvertisingAttribution.eventSenderInternal.await().sendEvent(
             name = "PURCHASE",

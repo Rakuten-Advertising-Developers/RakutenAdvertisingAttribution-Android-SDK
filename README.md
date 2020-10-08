@@ -26,13 +26,23 @@ This token is passed to our Attribution backend system to verify the SDK's ident
 Generate public/private key pairs with the following commands
 
 ```sh
-openssl genpkey -algorithm RSA -out rad_rsa_private.pem -pkeyopt rsa_keygen_bits:256
-openssl rsa -in rad_rsa_private.pem -pubout -out rad_rsa_public.pem
+openssl genrsa -out rad_rsa_private.pem 4096
+openssl rsa -in rad_rsa_private.pem -outform PEM -pubout -out rad_rsa_public.pem
 ```
-This command will create the following two files.
+This commands will create the following two files.
 1. rad_rsa_private.pem: Store this private key securely.
 2. rad_rsa_public.pem: This file is required by Rakuten Attribution backend platform to verify the signature of the authentication JWT. 
 (Public key handover process will be communicated separately)
+
+Then you need to save your private key somewhere in your application. 
+It's convenient to put in text file in assets folder and retrieve like this 
+
+```kotlin
+val secretKey = applicationContext.assets
+       .open("private_key")//"private_key" is file name
+       .bufferedReader()
+       .use { it.readText() }
+```
 
 #### Add RakutenAdvertisingAttribution SDK to project
 To use RakutenAdvertisingAttribution SDK you need to add this string to 'dependencies' section in build.gradle file of your application module.
