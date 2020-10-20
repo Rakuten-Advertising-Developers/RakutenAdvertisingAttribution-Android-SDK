@@ -85,7 +85,6 @@ It's constructor takes three parameters:
 * appId (unique android application id. You can get it from any Context class instance of your application)
 * appVersion (your application version name, '1.0' for example)
 * privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
-* isManualAppLaunch (flag that indicates if application was opened from link with the associated domain)
 * endpointUrl (url which sdk will send analytics to)
 * deviceId (optional parameter, unique device identifier, please read to get more information https://developer.android.com/training/articles/user-data-ids)
 
@@ -97,7 +96,6 @@ It's constructor takes three parameters:
                 appId = BuildConfig.APPLICATION_ID,
                 appVersion = BuildConfig.VERSION_NAME,
                 privateKey = secretKey,
-                isManualAppLaunch = false,
                 endpointUrl = ENDPOINT_URL,
                 deviceId = "12345"
         )
@@ -117,7 +115,7 @@ To send event to server you have to call sendEvent() method of EventSender sdk c
 The only required parameter of this method is 'name'
 
 ``` kotlin
-RakutenAdvertisingAttribution.eventSender.sendEvent(name = "PURCHASE")
+RakutenAdvertisingAttribution.sendEvent(name = "PURCHASE")
 ```
 
 Optionally you can pass an instance of [EventData](com.rakuten.attribution.sdk/-event-data/index.md) class, with event's metadata.
@@ -163,7 +161,7 @@ Optionally you can pass lambda to be called on operation result.
 So your sendEvent() call might look like this
 
 ``` kotlin
-  RakutenAdvertisingAttribution.eventSender.sendEvent(
+  RakutenAdvertisingAttribution.sendEvent(
                 name = action,
                 customData = customData,
                 eventData = eventData,
@@ -247,7 +245,7 @@ And optional lambda callback.
 
 ``` kotlin
 private fun resolveLink(link: String) {
-        RakutenAdvertisingAttribution.linkResolver.resolve(link) {
+        RakutenAdvertisingAttribution.resolve(link) {
             when (it) {
                 is Result.Success -> {
                 }
@@ -273,6 +271,7 @@ We provide a sample app that demonstrate the use of the Rakuten Advertising attr
 | Name | Summary |
 |---|---|
 | [com.rakuten.attribution.sdk](com.rakuten.attribution.sdk/index.md) | Contains all classes visible for users. |
+| [com.rakuten.attribution.sdk.network](com.rakuten.attribution.sdk.network/index.md) |  |
 
 ### Index
 

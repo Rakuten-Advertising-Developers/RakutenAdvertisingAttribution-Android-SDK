@@ -1,4 +1,4 @@
-[radattribution-sdk-android](../../index.md) / [com.rakuten.attribution.sdk](../index.md) / [LinkResolver](index.md) / [resolve](./resolve.md)
+[radattribution-sdk-android](../../index.md) / [com.rakuten.attribution.sdk](../index.md) / [RakutenAdvertisingAttribution](index.md) / [resolve](./resolve.md)
 
 # resolve
 

@@ -2,7 +2,7 @@
 
 # deviceId
 
-`val deviceId: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+`val deviceId: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
 
 unique device identifier, empty string will be sent if not set
 

@@ -2,3 +2,4 @@ $dokka.format:gfm
 $dokka.linkExtension:md
 
 com.rakuten.attribution.sdk
+com.rakuten.attribution.sdk.network
