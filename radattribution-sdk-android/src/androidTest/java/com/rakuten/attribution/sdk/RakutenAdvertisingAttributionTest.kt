@@ -38,8 +38,7 @@ class RakutenAdvertisingAttributionTest {
             appId = context.packageName,
             appVersion = appVersion,
             privateKey = secretKey,
-            endpointUrl = "https://api.rakutenadvertising.io/v2/",
-            deviceId = deviceId
+            endpointUrl = "https://api.rakutenadvertising.io/v2/"
         )
         runBlocking {
             fingerPrint = FingerprintFetcher(context).fetch()

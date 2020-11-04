@@ -72,7 +72,6 @@ It's constructor takes three parameters:
  - appVersion (your application version name, '1.0' for example)
  - privateKey (content of your rad_rsa_private.pem file, with both header and footer removed)
  - endpointUrl (url which sdk will send analytics to)
- - deviceId (optional parameter, unique device identifier, please read to get more information https://developer.android.com/training/articles/user-data-ids)
 ```kotlin
  const val ENDPOINT_URL = "https://api.rakutenadvertising.io/v2/"
  //const val ENDPOINT_URL_STAGING = "https://api.staging.rakutenadvertising.io/v2/"
@@ -81,8 +80,7 @@ It's constructor takes three parameters:
                 appId = BuildConfig.APPLICATION_ID,
                 appVersion = BuildConfig.VERSION_NAME,
                 privateKey = secretKey,
-                endpointUrl = ENDPOINT_URL,
-                deviceId = "12345"
+                endpointUrl = ENDPOINT_URL
         )
 ```
 

@@ -138,7 +138,7 @@ object RakutenAdvertisingAttribution {
                 AndroidAdIdFetcher(context).fetch()
             }
             return@async DeviceData.create(
-                deviceId = configuration.deviceId ?: ANDROID_ID,
+                deviceId = ANDROID_ID,
                 fingerPrint = fingerPrint.await(),
                 googleAdvertisingId = androidAdId.await()
             )
