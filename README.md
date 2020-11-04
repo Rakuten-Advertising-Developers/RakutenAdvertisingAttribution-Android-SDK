@@ -1,5 +1,5 @@
 ## RakutenAdvertising Attribution Android SDK 
-   Version 1.0.0
+   Version 1.0.1
 
 Rakuten advertising attribution SDK allows advertisers to track app installs and in-app conversion events using any affiliate link promoted within a publisher’s mobile app or on a mobile web page.
 
@@ -49,7 +49,7 @@ To use RakutenAdvertisingAttribution SDK you need to add this string to 'depende
 ```groovy
 dependencies {
     //...
-    implementation 'io.rakutenadvertising:attribution:1.0.0'
+    implementation 'io.rakutenadvertising:attribution:1.0.1'
 }
 ```
 and also you need to add mavenCentral to repositories list on you root build.gradle file 
