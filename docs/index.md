@@ -35,7 +35,7 @@ openssl genrsa -out rad_rsa_private.pem 4096
 openssl rsa -in rad_rsa_private.pem -outform PEM -pubout -out rad_rsa_public.pem
 ```
 
-This commands will create the following two files.
+These commands will create the following two files.
 
 1. rad_rsa_private.pem: Store this private key securely.
 2. rad_rsa_public.pem: This file is required by Rakuten Attribution backend platform to verify the signature of the authentication JWT. 
