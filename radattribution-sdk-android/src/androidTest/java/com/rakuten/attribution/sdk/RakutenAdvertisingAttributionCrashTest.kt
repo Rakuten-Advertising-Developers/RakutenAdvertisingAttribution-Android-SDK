@@ -16,8 +16,6 @@ class RakutenAdvertisingAttributionCrashTest {
     private val context = InstrumentationRegistry.getInstrumentation().context
     private val appVersion = "1.0"
 
-    private val deviceId = UUID.randomUUID().toString()
-
     private val secretKey = context.assets
         .open("private_key")
         .bufferedReader()
@@ -27,8 +25,7 @@ class RakutenAdvertisingAttributionCrashTest {
         appId = context.packageName,
         appVersion = appVersion,
         privateKey = secretKey,
-        endpointUrl = "https://api.rakutenadvertising.io/v2/",
-        deviceId = deviceId)
+        endpointUrl = "https://api.rakutenadvertising.io/v2/")
 
     @Test
     fun testExceptionWhenCalledFromWrongThread() = runBlocking {

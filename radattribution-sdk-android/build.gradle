@@ -10,7 +10,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'io.rakutenadvertising'
-version = "1.0.0"
+version = "1.0.1"
 
 android {
     compileSdkVersion 29

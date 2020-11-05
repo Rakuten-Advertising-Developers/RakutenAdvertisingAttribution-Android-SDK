@@ -14,7 +14,7 @@ internal data class DeviceData(
     @Json(name = "model") val model: String,
     @Json(name = "screen_width") val screenWidth: Int,
     @Json(name = "screen_height") val screenHeight: Int,
-    @Json(name = "device_id") val hardwareId: String,
+    @Json(name = "device_id") val deviceId: String,
     @Json(name = "is_simulator") val isSimulator: Boolean,
     @Json(name = "fingerprint") val fingerPrint: String?,
     @Json(name = "google_advertising_id") val googleAdvertisingId: String?
@@ -38,7 +38,7 @@ internal data class DeviceData(
                 model = Build.MODEL,
                 screenWidth = Resources.getSystem().displayMetrics.widthPixels,
                 screenHeight = Resources.getSystem().displayMetrics.heightPixels,
-                hardwareId = deviceId,
+                deviceId = deviceId,
                 isSimulator = Build.FINGERPRINT.contains("generic"),
                 fingerPrint = fingerPrint,
                 googleAdvertisingId = googleAdvertisingId
