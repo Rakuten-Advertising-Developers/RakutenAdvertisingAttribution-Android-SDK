@@ -8,7 +8,7 @@ buildscript {
         version_android_gradle_plugin = '3.6.2'
         version_constraint_layout = "2.0.1"
         version_glide = "4.8.0"
-        version_kotlin = "1.4.10"
+        version_kotlin = "1.4.20"
         version_kotlin_coroutines = "1.2.0"
         version_lifecycle_extensions = "2.0.0"
         version_moshi = "1.8.0"
